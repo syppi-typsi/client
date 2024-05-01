@@ -1,0 +1,15 @@
+---
+const { ...rest } = Astro.props;
+---
+
+<button type="button" {...rest}><slot></slot></button>
+
+<style lang="scss">
+  button {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: .5em;
+    padding: .5em .55em
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+import ArrowRight from "../icon/ArrowRight.astro";
+import MagGlass from "../icon/MagGlass.astro";
+---
+
+<section class="search-bar">
+  <div class="left">
+    <MagGlass></MagGlass>
+    <p>Search for drinks, categories & more...</p>
+  </div>
+  <div>
+    <ArrowRight></ArrowRight>
+  </div>
+</section>
+
+<style lang="scss">
+  .search-bar {
+    width: 600px;
+    height: 100%;
+    // height: fit-content;
+    box-sizing: border-box;
+    display: flex;
+    // flex-basis: 600px;
+    justify-content: space-between;
+    padding: 8px 13px;
+    border-radius: 999em;
+    background-color: var(--color-001);
+    outline: 2px solid var(--color-003);
+
+    * {
+      // flex-shrink: 0;
+    }
+
+    .left {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      // width: fit-content;
+    }
+    
+    svg {
+      color: var(--color-004);
+      height: 100%;
+      width: 26px;
+    }
+
+    p {
+      font-size: 1.5em;
+      color: var(--color-004);
+      font-weight: 500;
+    }
+  }
+</style>
