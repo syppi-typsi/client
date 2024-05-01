@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   --color-primary: #F4900C;
   --color-001: #FFFFFF;
   --color-002: #FBFBFB;
@@ -8,6 +9,7 @@
 }
 
 .theme-dark {
+  color-scheme: dark;
   --color-001: #1C1C1C;
   --color-002: #232323;
   --color-003: #3D3D3D;
