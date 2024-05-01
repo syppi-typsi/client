@@ -1,5 +1,6 @@
 ---
 import Header from "../components/header/Header.astro";
+import BrowseView from "../components/browse/BrowseView.astro";
 import "../styles/palette.scss";
 ---
 
@@ -12,7 +13,8 @@ import "../styles/palette.scss";
 		<title>typsi🍹</title>
 	</head>
 	<body>
-		<Header>
+		<Header></Header>
+		<BrowseView></BrowseView>
 	</body>
 </html>
 
@@ -31,6 +33,8 @@ import "../styles/palette.scss";
   }
 
 	body {
+		height: 100vh;
+		display: grid;
 		color: var(--color-text);
 		background-color: var(--color-001);
 		font-family: "Nunito";

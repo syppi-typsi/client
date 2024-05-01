@@ -1,5 +1,5 @@
 ---
-import ArrowRight from "../icon/ArrowRight.astro";
+import ArrowRight from "../icon/ArrowRightTail.astro";
 import MagGlass from "../icon/MagGlass.astro";
 ---
 
@@ -16,6 +16,7 @@ import MagGlass from "../icon/MagGlass.astro";
 <style lang="scss">
   .search-bar {
     width: 600px;
+    min-width: 180px;
     height: 100%;
     // height: fit-content;
     box-sizing: border-box;
@@ -35,13 +36,18 @@ import MagGlass from "../icon/MagGlass.astro";
       display: flex;
       gap: 8px;
       align-items: center;
-      // width: fit-content;
+      min-width: 0;
+      p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
     
     svg {
       color: var(--color-004);
       height: 100%;
-      width: 26px;
+      min-width: 26px;
     }
 
     p {

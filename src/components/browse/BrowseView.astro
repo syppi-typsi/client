@@ -1,0 +1,20 @@
+---
+import Filters from "./filter/Filters.astro";
+import Results from "./Results.astro";
+
+const outline = "2px";
+---
+
+<section class="browse-view">
+  <Filters outline={outline}></Filters>
+  <Results></Results>
+</section>
+
+<style lang="scss" define:vars={{ outline }}>
+  .browse-view {
+    min-height: 100%;
+    display: grid;
+    grid-template-columns: 300px auto;
+    gap: var(--outline);
+  }
+</style>

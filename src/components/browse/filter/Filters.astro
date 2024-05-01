@@ -1,0 +1,85 @@
+---
+import ArrowUp from "../../icon/ArrowUp.astro";
+import ArrowDown from "../../icon/ArrowDown.astro";
+import NestedCheckbox from "./NestedCheckbox.astro";
+
+const { outline } = Astro.props;
+---
+
+<section class="container">
+  <section class="categories">
+    <section class="header">
+      <div class="title">
+        <h2>Categories</h2>
+        <ArrowUp></ArrowUp>
+      </div>
+      <p>0 selected</p>
+    </section>
+    <section class="checkboxes">
+      <NestedCheckbox name="Soft drinks" ident="softdrink">
+        <NestedCheckbox name="Lemonade" ident="lemonade"></NestedCheckbox>
+        <NestedCheckbox name="Cola" ident="cola"></NestedCheckbox>
+        <NestedCheckbox name="Juice" ident="juice"></NestedCheckbox>
+      </NestedCheckbox>
+      <NestedCheckbox name="Alcoholic drinks" ident="alcohol">
+        <NestedCheckbox name="Long drinks" ident="long"></NestedCheckbox>
+        <NestedCheckbox name="Hard liquor" ident="hardliquor">
+          <NestedCheckbox name="Whiskey" ident="whiskey"></NestedCheckbox>
+          <NestedCheckbox name="Vodka" ident="vodka"></NestedCheckbox>
+          <NestedCheckbox name="Herbal liqour" ident="herbal"></NestedCheckbox>
+        </NestedCheckbox>
+        <NestedCheckbox name="Cocktail" ident="cocktail"></NestedCheckbox>
+      </NestedCheckbox>
+    </section>
+  </section>
+  <section class="filters">
+    <section class="header">
+      <div class="title">
+        <h2>Filters</h2>
+        <ArrowDown></ArrowDown>
+      </div>
+      <p>0 selected</p>
+    </section>
+  </section>
+</section>
+
+<style lang="scss" define:vars={{ outline }}>
+  .container {
+    z-index: 10;
+    background-color: var(--color-001);
+    color: var(--color-004);
+    display: flex;
+    flex-direction: column;
+    // box-sizing: border-box;
+    // gap: 16px;
+    padding: 20px;
+    outline: var(--outline) solid var(--color-003);
+    overflow: scroll;
+  }
+
+  .header {
+    margin-bottom: .5em;
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    svg {
+      height: 30px;
+      width: auto;
+    }
+  }
+
+  // .categories, .filters {
+  //   box-sizing: border-box;
+  // }
+
+  .checkboxes {
+    font-size: 1em;
+    * {
+      background-color: aqua;
+    }
+  }
+</style>

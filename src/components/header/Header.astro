@@ -8,13 +8,18 @@ import HeaderNav from "./HeaderNav.astro";
 
 <style lang="scss">
   header {
-    height: 92px;
+    $outline: 2px;
     box-sizing: border-box;
+    height: 92px;
+    padding: 22px 30px;
+    z-index: 100;
+    gap: 20px;
     display: flex;
+    width: 100vw;
     align-items: center;
     justify-content: space-between;
-    padding: 22px 30px;
     background-color: var(--color-002);
-    outline: 2px solid var(--color-003);
+    outline: $outline solid var(--color-003);
+    margin-bottom: $outline;
   }
 </style>

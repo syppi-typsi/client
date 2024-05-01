@@ -1,0 +1,35 @@
+---
+const { name, ident } = Astro.props;
+---
+
+<section class="container">
+  <div class="center">
+    <input type="checkbox" name={name} id={ident}>
+    <label for={ident}>{name}</label>
+  </div>
+  <div class="children"><slot></slot></div>
+</section>
+
+<style lang="scss">
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: .4em;
+    
+  }
+
+  .children {
+    padding-left: 1.2em;
+  }
+
+  .center {
+    display: flex;
+    gap: .5em;
+    align-items: center;
+  }
+
+  label {
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+</style>
