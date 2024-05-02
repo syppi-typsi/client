@@ -1,20 +1,18 @@
 ---
 import Filters from "./filter/Filters.astro";
-import Results from "./Results.astro";
-
-const outline = "2px";
+import Results from "./result/Results.astro";
 ---
 
 <section class="browse-view">
-  <Filters outline={outline}></Filters>
+  <Filters></Filters>
   <Results></Results>
 </section>
 
-<style lang="scss" define:vars={{ outline }}>
+<style lang="scss">
   .browse-view {
     min-height: 100%;
     display: grid;
     grid-template-columns: 300px auto;
-    gap: var(--outline);
+    gap: var(--pane-outline);
   }
 </style>

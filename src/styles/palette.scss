@@ -1,10 +1,12 @@
 :root {
   color-scheme: light;
+  accent-color: var(--color-primary);
   --color-primary: #F4900C;
   --color-001: #FFFFFF;
   --color-002: #FBFBFB;
   --color-003: #D9D9D9;
-  --color-004: #848484;
+  --color-004: #777777;
+  --color-005: #535353;
   --color-text: black;
 }
 
@@ -14,5 +16,6 @@
   --color-002: #232323;
   --color-003: #3D3D3D;
   --color-004: #a3a3a3;
+  --color-005: #d1d1d1;
   --color-text: white;
 }

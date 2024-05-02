@@ -2,8 +2,6 @@
 import ArrowUp from "../../icon/ArrowUp.astro";
 import ArrowDown from "../../icon/ArrowDown.astro";
 import NestedCheckbox from "./NestedCheckbox.astro";
-
-const { outline } = Astro.props;
 ---
 
 <section class="container">
@@ -43,17 +41,17 @@ const { outline } = Astro.props;
   </section>
 </section>
 
-<style lang="scss" define:vars={{ outline }}>
+<style lang="scss">
   .container {
     z-index: 10;
     background-color: var(--color-001);
-    color: var(--color-004);
+    color: var(--color-005);
     display: flex;
     flex-direction: column;
     // box-sizing: border-box;
     // gap: 16px;
     padding: 20px;
-    outline: var(--outline) solid var(--color-003);
+    outline: var(--pane-outline) solid var(--color-003);
     overflow-y: scroll;
   }
 

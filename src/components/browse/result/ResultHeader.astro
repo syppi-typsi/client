@@ -1,0 +1,62 @@
+---
+import GenericButton from "../../input/button/GenericButton.astro";
+import GenericSelect from "../../input/GenericSelect.astro";
+import Grid from "../../icon/Grid.astro";
+import List from "../../icon/List.astro";
+---
+
+<section class="header">
+  <div class="page">
+    <h2>Page 1</h2>
+  </div>
+  <div class="view">
+    <GenericSelect>
+      <option value="0">A-Z</option>
+      <option value="1">Top rated</option>
+      <option value="2">Recently added</option>
+    </GenericSelect>
+    <GenericButton><Grid/></GenericButton>
+    <GenericButton><List/></GenericButton>
+  </div>
+</section>
+
+<style lang="scss">
+  .header {
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background-color: var(--color-001);
+    outline: var(--pane-outline) solid var(--color-003);
+  }
+
+  .page * {
+    color: var(--color-004);
+    font-weight: 600;
+  }
+
+  .view {
+    display: flex;
+    gap: 10px;
+  }
+
+  svg {
+    height: 30px;
+    width: auto;
+  }
+
+  button:has(svg) {
+    padding: .3em;
+  }
+  
+  button {
+    font-size: 1.1em;
+    color: var(--color-005);
+    background-color: var(--color-003);
+  }
+
+  h2 > svg {
+    display: inline;
+  }
+</style>

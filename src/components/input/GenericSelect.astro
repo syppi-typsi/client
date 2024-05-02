@@ -1,0 +1,45 @@
+---
+import ArrowDown from "../icon/ArrowDown.astro";
+---
+
+<div class="select">
+  <select>
+    <slot />
+  </select>
+  <ArrowDown></ArrowDown>
+</div>
+
+<style lang="scss">
+  $horizontal-pad: 0.7rem;
+  $arrow-width: 1.6rem;
+  $gap: $horizontal-pad;
+
+  .select {
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    font-size: 1.2em;
+  }
+  
+  select {
+    background-color: var(--color-003);
+    height: 100%;
+    border: none;
+    font: inherit;
+    font-weight: 600;
+    color: var(--color-005);
+    padding: .3rem ($arrow-width + $horizontal-pad + $gap - 0.8rem) .3rem $horizontal-pad;
+    appearance: none;
+    outline: none;
+  }
+
+  svg {
+    position: absolute;
+    top: 0;
+    right: $horizontal-pad - 0.4rem;
+    height: 100%;
+    width: $arrow-width;
+    pointer-events: none;
+    color: var(--color-004);
+  }
+</style>

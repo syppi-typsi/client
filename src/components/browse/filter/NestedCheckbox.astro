@@ -7,7 +7,7 @@ const { name, ident } = Astro.props;
     <input type="checkbox" name={name} id={ident}>
     <label for={ident}>{name}</label>
   </div>
-  <div class="children"><slot></slot></div>
+  <div class="children"><slot /></div>
 </section>
 
 <style lang="scss">
