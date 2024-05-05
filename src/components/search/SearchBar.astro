@@ -6,9 +6,10 @@ import MagGlass from "../icon/MagGlass.astro";
 <section class="search-bar">
   <div class="left">
     <MagGlass></MagGlass>
-    <p>Search for drinks, categories & more...</p>
+    <!-- <p>Search for drinks, categories & more...</p> -->
+    <input type="search" placeholder="Search for drinks, categories & more..."></input>
   </div>
-  <div>
+  <div class="right">
     <ArrowRight></ArrowRight>
   </div>
 </section>
@@ -37,11 +38,15 @@ import MagGlass from "../icon/MagGlass.astro";
       gap: 8px;
       align-items: center;
       min-width: 0;
-      p {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+      width: 100%;
+      // p {
+      //   overflow: hidden;
+      //   text-overflow: ellipsis;
+      //   white-space: nowrap;
+      //   font-size: 1.5em;
+      //   color: var(--color-004);
+      //   font-weight: 500;
+      // }
     }
     
     svg {
@@ -50,10 +55,22 @@ import MagGlass from "../icon/MagGlass.astro";
       min-width: 26px;
     }
 
-    p {
+    input {
+      // &::placeholder {
+      //   color: var(--color-004);
+      //   opacity: 1;
+      // }
+      font: inherit;
       font-size: 1.5em;
       color: var(--color-004);
       font-weight: 500;
+      padding: 0;
+      flex-grow: 1;
+      outline: none;
+      border: none;
+      background: transparent;
+      text-overflow: ellipsis;
+      min-width: 0;
     }
   }
 </style>
