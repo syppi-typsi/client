@@ -6,15 +6,28 @@ const { ...rest } = Astro.props;
 
 <style lang="scss">
   button {
+    --button-bg-color: var(--color-003);
+    --button-text-color: var(--color-text);
     display: flex;
     align-items: center;
-    background-color: var(--color-primary);
-    color: white;
+    justify-content: center;
+    background-color: var(--button-bg-color);
+    transition: background-color 100ms ease, color 80ms ease;
+    color: var(--button-text-color);
     border: none;
-    border-radius: .5em;
+    border-radius: var(--element-border-radius);
     padding: .45em .55em;
     white-space: nowrap;
     font: inherit;
     font-weight: 600;
+    text-align: center;
+
+    body:not(.theme-dark) &:hover {
+      background-color: color-mix(in oklab, var(--button-bg-color) 90%, black 10%);
+    }
+
+    :root:has(body.theme-dark) &:hover {
+      background-color: color-mix(in oklab, var(--button-bg-color) 90%, white 10%);
+    }
   }
 </style>

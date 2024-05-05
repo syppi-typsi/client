@@ -13,24 +13,35 @@ import ArrowDown from "../icon/ArrowDown.astro";
   $horizontal-pad: 0.7rem;
   $arrow-width: 1.6rem;
   $gap: $horizontal-pad;
-
+  
   .select {
-    border-radius: 10px;
+    --select-bg-color: var(--color-003);
+    --select-text-color: var(--color-005);
+    border-radius: var(--element-border-radius);
     overflow: hidden;
     position: relative;
     font-size: 1.2em;
   }
   
   select {
-    background-color: var(--color-003);
+    background-color: var(--select-bg-color);
+    transition: background-color 100ms ease;
     height: 100%;
     border: none;
     font: inherit;
     font-weight: 600;
-    color: var(--color-005);
+    color: var(--select-text-color);
     padding: .3rem ($arrow-width + $horizontal-pad + $gap - 0.8rem) .3rem $horizontal-pad;
     appearance: none;
     outline: none;
+
+    body:not(.theme-dark) &:hover {
+      background-color: color-mix(in oklab, var(--select-bg-color) 90%, black 10%);
+    }
+
+    :root:has(body.theme-dark) &:hover {
+      background-color: color-mix(in oklab, var(--select-bg-color) 90%, white 10%);
+    }
   }
 
   svg {
@@ -40,6 +51,6 @@ import ArrowDown from "../icon/ArrowDown.astro";
     height: 100%;
     width: $arrow-width;
     pointer-events: none;
-    color: var(--color-004);
+    color: var(--select-text-color);
   }
 </style>

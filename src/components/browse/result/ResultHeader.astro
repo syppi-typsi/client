@@ -3,11 +3,12 @@ import GenericButton from "../../input/button/GenericButton.astro";
 import GenericSelect from "../../input/GenericSelect.astro";
 import Grid from "../../icon/Grid.astro";
 import List from "../../icon/List.astro";
+import PageSelect from "./PageSelect.astro";
 ---
 
 <section class="header">
   <div class="page">
-    <h2>Page 1</h2>
+    <PageSelect></PageSelect>
   </div>
   <div class="view">
     <GenericSelect>
@@ -26,14 +27,17 @@ import List from "../../icon/List.astro";
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 18px;
+    padding: 10px 12px;
     background-color: var(--color-001);
     outline: var(--pane-outline) solid var(--color-003);
   }
 
-  .page * {
-    color: var(--color-004);
-    font-weight: 600;
+  .page {
+    height: 100%;
+    * {
+      color: var(--color-004);
+      font-weight: 600;
+    }
   }
 
   .view {
@@ -52,8 +56,7 @@ import List from "../../icon/List.astro";
   
   button {
     font-size: 1.1em;
-    color: var(--color-005);
-    background-color: var(--color-003);
+    --button-text-color: var(--color-005);
   }
 
   h2 > svg {

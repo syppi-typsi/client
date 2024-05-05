@@ -1,0 +1,60 @@
+---
+import ArrowLeftTail from "../../icon/ArrowLeftTail.astro";
+import ArrowRightTail from "../../icon/ArrowRightTail.astro";
+import GenericButton from "../../input/button/GenericButton.astro";
+---
+
+<section class="paginator">
+  <GenericButton class="backandforth back-button">
+    <ArrowLeftTail></ArrowLeftTail>
+  </GenericButton>
+  <section class="numbers">
+    <GenericButton><p>1</p></GenericButton>
+    <GenericButton><p>2</p></GenericButton>
+    <GenericButton><p>3</p></GenericButton>
+    <span style="user-select: none;">...</span>
+    <GenericButton><p>100</p></GenericButton>
+  </section>
+  <GenericButton class="backandforth forward-button">
+    <ArrowRightTail></ArrowRightTail>
+  </GenericButton>
+</section>
+
+<style lang="scss">
+  .paginator {
+    display: flex;
+    gap: .3em;
+    height: 100%;
+  }
+  .backandforth {
+    border-radius: 999em;
+    height: 100%;
+    aspect-ratio: 1;
+    background-color: transparent;
+    svg {
+      height: 100%;
+      scale: 0.8;
+      width: auto;
+    }
+    &:hover {
+      background-color: var(--color-003) !important;
+    }
+  }
+  .numbers {
+    display: flex;
+    align-items: center;
+    gap: .9em;
+    background-color: var(--color-003);
+    border-radius: 999em;
+    flex-shrink: 0;
+    padding: 0 .9em;
+    button {
+      background-color: transparent !important;
+      border-radius: 999em;
+      padding: 0;
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+  }
+</style>
