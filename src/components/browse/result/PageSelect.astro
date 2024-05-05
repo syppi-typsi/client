@@ -9,11 +9,11 @@ import GenericButton from "../../input/button/GenericButton.astro";
     <ArrowLeftTail></ArrowLeftTail>
   </GenericButton>
   <section class="numbers">
-    <GenericButton><p>1</p></GenericButton>
-    <GenericButton><p>2</p></GenericButton>
-    <GenericButton><p>3</p></GenericButton>
+    <GenericButton>1</GenericButton>
+    <GenericButton>2</GenericButton>
+    <GenericButton>3</GenericButton>
     <span style="user-select: none;">...</span>
-    <GenericButton><p>100</p></GenericButton>
+    <GenericButton>100</GenericButton>
   </section>
   <GenericButton class="backandforth forward-button">
     <ArrowRightTail></ArrowRightTail>
@@ -49,6 +49,7 @@ import GenericButton from "../../input/button/GenericButton.astro";
     flex-shrink: 0;
     padding: 0 .9em;
     button {
+      color: var(--color-005);
       background-color: transparent !important;
       border-radius: 999em;
       padding: 0;
