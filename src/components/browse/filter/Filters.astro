@@ -70,9 +70,33 @@ import NestedCheckbox from "./NestedCheckbox.astro";
     selectedText.filters.innerHTML = generateSelected(checked.filters.length);
   }
 
+  function checkAllChildren(element: Element) {
+    if (element.checked) {
+      const children = element.parentElement!.parentElement!.querySelectorAll(`.children input[type="checkbox"]`)
+      children.forEach((child) => {
+        child.checked = true
+      })
+    }
+  }
+
+  function uncheckParents(element: Element) {
+    if (!element.checked) {
+      const parent = element.closest(".container")!.parentElement!
+      const parentBox = parent.closest(".container")!.querySelector(`input[type="checkbox"]`)!
+      console.log(parent);
+      console.log(parent.closest(".container")!.querySelector(`input[type="checkbox"]`)!);
+      if (parent.className !== "checkboxes") {
+        parentBox.checked = false;
+        uncheckParents(parentBox)
+      }
+    }
+  }
+
   Object.values(checks).forEach((value) => {
     value.forEach((element) => {
       element.addEventListener("change", () => {
+        checkAllChildren(element)
+        uncheckParents(element)
         checked = updateChecked(":checked")
         updateCheckedText()
       })
