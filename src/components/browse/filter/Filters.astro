@@ -11,7 +11,7 @@ import NestedCheckbox from "./NestedCheckbox.astro";
         <h2>Categories</h2>
         <ArrowUp></ArrowUp>
       </div>
-      <p>0 selected</p>
+      <p class="count">None selected</p>
     </section>
     <section class="checkboxes">
       <NestedCheckbox name="Soft drinks" ident="softdrink">
@@ -36,10 +36,51 @@ import NestedCheckbox from "./NestedCheckbox.astro";
         <h2>Filters</h2>
         <ArrowDown></ArrowDown>
       </div>
-      <p>0 selected</p>
+      <p class="count">None selected</p>
     </section>
   </section>
 </section>
+
+<script>
+  const selectedSuffix = " selected";
+  const selectedText = {
+    categories: document.querySelector(".categories .header .count")!,
+    filters: document.querySelector(".filters .header .count")!
+  }
+  const checks = updateChecked()
+  let checked = updateChecked(":checked")
+
+  function updateChecked(suffix?: string) {
+    return {
+      categories: document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]${suffix || ''}`)!,
+      filters: document.querySelectorAll(`.filters .checkboxes input[type="checkbox"]${suffix || ''}`)!
+    }
+  }
+
+  function generateSelected(input: number) {
+    if (input === 0) {
+      return "None" + selectedSuffix
+    } else {
+      return input + selectedSuffix
+    }
+  }
+
+  function updateCheckedText() {
+    selectedText.categories.innerHTML = generateSelected(checked.categories.length);
+    selectedText.filters.innerHTML = generateSelected(checked.filters.length);
+  }
+
+  Object.values(checks).forEach((value) => {
+    value.forEach((element) => {
+      element.addEventListener("change", () => {
+        checked = updateChecked(":checked")
+        updateCheckedText()
+      })
+    })
+  })
+
+  updateCheckedText()
+</script>
 
 <style lang="scss">
   .container {
