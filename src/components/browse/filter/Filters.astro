@@ -109,6 +109,7 @@ import NestedCheckbox from "./NestedCheckbox.astro";
         const children = parent.querySelectorAll(`.children input[type="checkbox"]`)
         if (Array.from(children).every((el) => el.checked)) {
           parentBox.checked = true
+          allSiblingsChecked(parentBox)
         }
       }
     }
