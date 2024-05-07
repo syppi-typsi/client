@@ -1,0 +1,72 @@
+---
+import ArrowDown from "../../icon/ArrowDown.astro";
+
+const { title, class: className, open } = Astro.props;
+---
+
+<section class=`collapsible ${className}`>
+  <details class="header" {open}>
+    <summary>
+      <div class="title">
+        <h2>{title}</h2>
+        <ArrowDown></ArrowDown>
+      </div>
+      <p class="count">None selected</p>
+    </summary>
+  </details>
+  <section class="content">
+    <section class="gridchild">
+      <slot />
+    </section>
+  </section>
+</section>
+
+<style lang="scss">
+  $transitionspeed: 150ms;
+
+  .header {
+    margin-bottom: .5em;
+
+    summary {
+      display: block;
+      &::-webkit-details-marker {
+          display: none; /* This also hides the ::marker pseudo-element, but in Safari */
+      }
+    }
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    svg {
+      height: 30px;
+      width: auto;
+      transition: transform $transitionspeed;
+    }
+  }
+  
+  .content {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows $transitionspeed ease-out, opacity $transitionspeed ease-out;
+    & > * {
+      grid-row: 1 / span 2;
+    }
+  }
+
+  details[open] .title svg {
+    transform: scaleY(-1);
+  }
+
+  details[open] + .content {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  .gridchild {
+    overflow: hidden;
+  }
+</style>

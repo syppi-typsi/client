@@ -1,18 +1,10 @@
 ---
-import ArrowUp from "../../icon/ArrowUp.astro";
-import ArrowDown from "../../icon/ArrowDown.astro";
 import NestedCheckbox from "./NestedCheckbox.astro";
+import Collapsible from "./Collapsible.astro";
 ---
 
 <section class="container">
-  <section class="categories">
-    <section class="header">
-      <div class="title">
-        <h2>Categories</h2>
-        <ArrowUp></ArrowUp>
-      </div>
-      <p class="count">None selected</p>
-    </section>
+  <Collapsible title="Categories" class="categories" open>
     <section class="checkboxes">
       <NestedCheckbox name="Soft drinks" ident="softdrink">
         <NestedCheckbox name="Lemonade" ident="lemonade"></NestedCheckbox>
@@ -29,16 +21,9 @@ import NestedCheckbox from "./NestedCheckbox.astro";
         <NestedCheckbox name="Cocktail" ident="cocktail"></NestedCheckbox>
       </NestedCheckbox>
     </section>
-  </section>
-  <section class="filters">
-    <section class="header">
-      <div class="title">
-        <h2>Filters</h2>
-        <ArrowDown></ArrowDown>
-      </div>
-      <p class="count">None selected</p>
-    </section>
-  </section>
+  </Collapsible>
+  <Collapsible title="Filters" class="filters">
+  </Collapsible>
 </section>
 
 <script>
@@ -126,36 +111,13 @@ import NestedCheckbox from "./NestedCheckbox.astro";
     color: var(--color-005);
     display: flex;
     flex-direction: column;
-    // box-sizing: border-box;
     // gap: 16px;
     padding: 20px;
     outline: var(--pane-outline) solid var(--color-003);
     overflow-y: scroll;
   }
 
-  .header {
-    margin-bottom: .5em;
-  }
-
-  .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    svg {
-      height: 30px;
-      width: auto;
-    }
-  }
-
-  // .categories, .filters {
-  //   box-sizing: border-box;
-  // }
-
   .checkboxes {
     font-size: 1em;
-    * {
-      background-color: aqua;
-    }
   }
 </style>
