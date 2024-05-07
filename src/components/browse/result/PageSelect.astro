@@ -43,16 +43,18 @@ import GenericButton from "../../input/button/GenericButton.astro";
   .numbers {
     display: flex;
     align-items: center;
-    gap: .9em;
+    gap: 0;
     background-color: var(--color-003);
     border-radius: 999em;
     flex-shrink: 0;
-    padding: 0 .9em;
+    padding: 0 .7em;
+    & > * {
+      padding: .4em;
+    }
     button {
       color: var(--color-005);
       background-color: transparent !important;
       border-radius: 999em;
-      padding: 0;
       &:hover {
         color: var(--color-primary);
       }
