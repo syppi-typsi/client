@@ -70,22 +70,11 @@ import NestedCheckbox from "./NestedCheckbox.astro";
     selectedText.filters.innerHTML = generateSelected(checked.filters.length);
   }
 
-  function checkAllChildren(element: Element) {
-    if (element.checked) {
-      const children = element.closest(".container")!.querySelectorAll(`.children input[type="checkbox"]`)
-      children.forEach((child) => {
-        child.checked = true
-      })
-    }
-  }
-
-  function uncheckAllChildren(element: Element) {
-    if (!element.checked) {
-      const children = element.closest(".container")!.querySelectorAll(`.children input[type="checkbox"]`)
-      children.forEach((child) => {
-        child.checked = false
-      })
-    }
+  function changeAllChildren(element: Element) {
+    const children = element.closest(".container")!.querySelectorAll(`.children input[type="checkbox"]`)
+    children.forEach((child) => {
+      child.checked = element.checked
+    })
   }
 
   function uncheckParents(element: Element) {
@@ -118,8 +107,7 @@ import NestedCheckbox from "./NestedCheckbox.astro";
   Object.values(checks).forEach((value) => {
     value.forEach((element) => {
       element.addEventListener("change", () => {
-        checkAllChildren(element)
-        uncheckAllChildren(element)
+        changeAllChildren(element)
         uncheckParents(element)
         allSiblingsChecked(element)
         checked = updateChecked(":checked")
