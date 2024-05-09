@@ -1,0 +1,29 @@
+---
+import PageSelect from "./PageSelect.astro";
+---
+
+<section class="footer">
+  <div class="page">
+    <PageSelect></PageSelect>
+  </div>
+</section>
+
+<style lang="scss">
+  .footer {
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    background-color: var(--color-001);
+    outline: var(--pane-outline) solid var(--color-003);
+  }
+
+  .page {
+    height: 100%;
+    * {
+      color: var(--color-004);
+      font-weight: 600;
+    }
+  }
+</style>
