@@ -1,5 +1,4 @@
 ---
-import GridCard from "./GridCard.astro";
 import ResultFooter from "./ResultFooter.astro";
 import ResultHeader from "./ResultHeader.astro";
 ---
@@ -8,16 +7,102 @@ import ResultHeader from "./ResultHeader.astro";
   <ResultHeader></ResultHeader>
   <section class="mainview">
     <section class="results">
-      <GridCard name="Lorem ipsum" manufacturer="Dolor sit amet Co." rating={Math.floor(Math.random()*100)}></GridCard>
-      <GridCard name="Lorem ipsum" manufacturer="Dolor sit amet Co." rating={Math.floor(Math.random()*100)}></GridCard>
-      <GridCard name="Lorem ipsum" manufacturer="Dolor sit amet Co." rating={Math.floor(Math.random()*100)}></GridCard>
-      <GridCard name="Lorem ipsum" manufacturer="Dolor sit amet Co." rating={Math.floor(Math.random()*100)}></GridCard>
-      <GridCard name="Lorem ipsum" manufacturer="Dolor sit amet Co." rating={Math.floor(Math.random()*100)}></GridCard>
-      <GridCard name="Lorem ipsum" manufacturer="Dolor sit amet Co." rating={Math.floor(Math.random()*100)}></GridCard>
     </section>
     <ResultFooter></ResultFooter>
   </section>
 </section>
+
+<template id="cardTemplate">
+  <section class="card">
+    <section class="image"><img alt=""></section>
+    <section class="info">
+      <h2 class="title"></h2>
+      <section class="sub">
+        <h4 class="manuf"></h4>
+      </section>
+    </section>
+    <div class="rating">
+      <p></p>
+    </div>
+  </section>
+</template>
+
+<script>
+  function getSelectedIDs() {
+    return Array.from(document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]:checked`)).map(obj => {
+      if (obj instanceof HTMLElement) {
+        return obj.dataset.categoryId
+      }
+    })
+  }
+
+  function createGridCard(input) {
+    const template = document.getElementById('cardTemplate') as HTMLTemplateElement
+    const content = template?.content.cloneNode(true) as HTMLElement
+
+    const img = content.querySelector('img')!
+    const title = content.querySelector('.title')!
+    const manuf = content.querySelector('.manuf')!
+    const rating = content.querySelector('.rating p')!
+
+    img.src = input.product_image ? input.product_image : "/img/syppi-typsi-bw-o.svg"
+    title.innerHTML = input.name
+    manuf.innerHTML = input.producer
+
+    if (input.rating) {
+      rating.innerHTML = `${input.rating}/100`
+    } else {
+      rating.innerHTML = `?/100`
+    }
+
+    return content
+  }
+
+  // function createGridCard(input) {
+  //   const card = document.createElement('section')
+  //   const image = document.createElement('section')
+  //   const img = document.createElement('img')
+  //   const info = document.createElement('section')
+  //   const rating = document.createElement('div')
+  //   const title = document.createElement('h2')
+  //   const sub = document.createElement('section')
+  //   const manuf = document.createElement('h4')
+  //   const ratetext = document.createElement('p')
+    
+  //   card.classList.add('card')
+  //   image.classList.add('image')
+  //   info.classList.add('info')
+  //   rating.classList.add('rating')
+  //   title.classList.add('title')
+  //   sub.classList.add('sub')
+  //   manuf.classList.add('manuf')
+
+  //   card.append(image, info, rating)
+  //   image.appendChild(img)
+  //   info.append(title, sub)
+  //   sub.appendChild(manuf)
+  //   rating.appendChild(ratetext)
+
+  //   title.innerHTML = input.name
+  //   manuf.innerHTML = input.producer
+  //   if (input.rating) {
+  //     ratetext.innerHTML = `${input.rating}/100`
+  //   } else {
+  //     ratetext.innerHTML = `?/100`
+  //   }
+  //   img.src = input.product_image ? input.product_image : "/img/syppi-typsi-bw-o.svg"
+    
+  //   return card
+  // }
+
+  const drinksData = await fetch("http://localhost:3000/drinks", {
+    method: 'GET'
+  }).then(response => response.json())
+
+  for (const iterator of drinksData) {
+    document.querySelector('.results')?.appendChild(createGridCard(iterator))
+  }
+</script>
 
 <style lang="scss">
   .container {
@@ -37,12 +122,66 @@ import ResultHeader from "./ResultHeader.astro";
   .results {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: min-content;
+    grid-auto-rows: min-content;
     gap: 16px;
     background-color: var(--color-002);
     padding: 20px;
     h2 {
       font-weight: 500;
+    }
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: 100px auto min-content;
+    align-items: end;
+    gap: 8px;
+    height: 200px;
+    padding: 1em;
+    border-radius: var(--element-border-radius);
+    // background-color: var(--color-002);
+    outline: var(--pane-outline) solid var(--color-003);
+
+    .image {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      padding: 0 .5em;
+      box-sizing: border-box;
+    }
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      object-position: bottom;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      gap: 4px;
+
+      .title {
+        line-height: 1.2;
+        word-break: break-word;
+      }
+
+      .manuf {
+        color: var(--color-005);
+      }
+    }
+
+    .rating {
+      font-size: 1.4em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .sub {
+      display: flex;
+      justify-content: space-between;
     }
   }
 </style>

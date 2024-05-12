@@ -1,47 +1,72 @@
 ---
-import NestedCheckbox from "./NestedCheckbox.astro";
 import Collapsible from "./Collapsible.astro";
 ---
 
 <section class="container">
   <Collapsible title="Categories" class="categories" open>
     <section class="checkboxes">
-      <NestedCheckbox name="Soft drinks" ident="softdrink">
-        <NestedCheckbox name="Lemonade" ident="lemonade"></NestedCheckbox>
-        <NestedCheckbox name="Cola" ident="cola"></NestedCheckbox>
-        <NestedCheckbox name="Juice" ident="juice"></NestedCheckbox>
-      </NestedCheckbox>
-      <NestedCheckbox name="Alcoholic drinks" ident="alcohol">
-        <NestedCheckbox name="Long drinks" ident="long"></NestedCheckbox>
-        <NestedCheckbox name="Hard liquor" ident="hardliquor">
-          <NestedCheckbox name="Whiskey" ident="whiskey"></NestedCheckbox>
-          <NestedCheckbox name="Vodka" ident="vodka"></NestedCheckbox>
-          <NestedCheckbox name="Herbal liqour" ident="herbal"></NestedCheckbox>
-        </NestedCheckbox>
-        <NestedCheckbox name="Cocktail" ident="cocktail"></NestedCheckbox>
-      </NestedCheckbox>
     </section>
   </Collapsible>
   <Collapsible title="Filters" class="filters">
   </Collapsible>
 </section>
 
+<template id="checkboxTemplate">
+  <section class="cb-container">
+    <div class="center">
+      <input type="checkbox">
+      <label></label>
+    </div>
+    <div class="children">
+      <slot name="children"></slot>
+    </div>
+  </section>
+</template>
+
 <script>
+  const categoriesData = await fetch("http://localhost:3000/categories", {
+    method: 'GET'
+  }).then(response => response.json())
+  
   const selectedSuffix = " selected";
   const selectedText = {
     categories: document.querySelector(".categories .header .count")!,
     filters: document.querySelector(".filters .header .count")!
   }
-  const checks = updateChecked()
-  let checked = updateChecked(":checked")
 
+  function getChildren(id: number | null) {
+    return categoriesData.filter(obj => obj.parent === id)
+  }
+  
+  function createCheckbox(name: string, id: number) {
+    const template = document.getElementById('checkboxTemplate') as HTMLTemplateElement
+    const content = template?.content.cloneNode(true) as HTMLElement
+
+    const checkbox = content.querySelector('input[type="checkbox"]')! as HTMLInputElement
+    const label = content.querySelector('label')!
+    const children = content.querySelector('.children')!
+
+    checkbox.id = `category-checkbox-${id.toString()}`
+    checkbox.name = name
+    label.htmlFor = `category-checkbox-${id.toString()}`
+    label.innerHTML = name
+
+    // add all children recursively
+    for (const iterator of getChildren(id)) {
+      children.appendChild(createCheckbox(iterator.name, iterator.id))
+    }
+
+    return content
+  }
+  
   function updateChecked(suffix?: string) {
+    const query = `.checkboxes input[type="checkbox"]${suffix || ''}`
     return {
-      categories: document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]${suffix || ''}`)!,
-      filters: document.querySelectorAll(`.filters .checkboxes input[type="checkbox"]${suffix || ''}`)!
+      categories: document.querySelectorAll(`.categories ${query}`)!,
+      filters: document.querySelectorAll(`.filters ${query}`)!
     }
   }
-
+  
   function generateSelected(input: number) {
     if (input === 0) {
       return "None" + selectedSuffix
@@ -54,32 +79,30 @@ import Collapsible from "./Collapsible.astro";
     selectedText.categories.innerHTML = generateSelected(checked.categories.length);
     selectedText.filters.innerHTML = generateSelected(checked.filters.length);
   }
-
+  
   function changeAllChildren(element: Element) {
-    const children = element.closest(".container")!.querySelectorAll(`.children input[type="checkbox"]`)
+    const children = element.closest(".cb-container")!.querySelectorAll(`.children input[type="checkbox"]`)
     children.forEach((child) => {
       child.checked = element.checked
     })
   }
-
+  
   function uncheckParents(element: Element) {
     if (!element.checked) {
-      const parent = element.closest(".container")!.parentElement!
-      const parentBox = parent.closest(".container")!.querySelector(`input[type="checkbox"]`)!
-      console.log(parent);
-      console.log(parent.closest(".container")!.querySelector(`input[type="checkbox"]`)!);
+      const parent = element.closest(".cb-container")!.parentElement!
       if (parent.className !== "checkboxes") {
+        const parentBox = parent.closest(".cb-container")!.querySelector(`input[type="checkbox"]`)!
         parentBox.checked = false;
         uncheckParents(parentBox)
       }
     }
   }
-
+  
   function allSiblingsChecked(element: Element) {
     if (element.checked) {
-      const parent = element.closest(".container")!.parentElement!
-      const parentBox = parent.closest(".container")!.querySelector(`input[type="checkbox"]`)!
+      const parent = element.closest(".cb-container")!.parentElement!
       if (parent.className !== "checkboxes") {
+        const parentBox = parent.closest(".cb-container")!.querySelector(`input[type="checkbox"]`)!
         const children = parent.querySelectorAll(`.children input[type="checkbox"]`)
         if (Array.from(children).every((el) => el.checked)) {
           parentBox.checked = true
@@ -89,6 +112,13 @@ import Collapsible from "./Collapsible.astro";
     }
   }
 
+  for (const iterator of getChildren(null)) {
+    document.querySelector('.checkboxes')?.appendChild(createCheckbox(iterator.name, iterator.id))
+  }
+  
+  const checks = updateChecked()
+  let checked = updateChecked(":checked")
+  
   Object.values(checks).forEach((value) => {
     value.forEach((element) => {
       element.addEventListener("change", () => {
@@ -100,7 +130,7 @@ import Collapsible from "./Collapsible.astro";
       })
     })
   })
-
+  
   updateCheckedText()
 </script>
 
@@ -120,4 +150,26 @@ import Collapsible from "./Collapsible.astro";
   .checkboxes {
     font-size: 1em;
   }
+
+  .cb-container {
+    display: flex;
+    flex-direction: column;
+    gap: .4em;
+    
+    .children {
+      padding-left: 1.2em;
+    }
+  
+    .center {
+      display: flex;
+      gap: .5em;
+      align-items: center;
+    }
+  
+    label {
+      font-size: 1.2em;
+      font-weight: 500;
+    }
+  }
+
 </style>
