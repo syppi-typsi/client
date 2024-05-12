@@ -1,4 +1,5 @@
 ---
+import Triangle from "../../icon/Triangle.astro";
 import ResultFooter from "./ResultFooter.astro";
 import ResultHeader from "./ResultHeader.astro";
 ---
@@ -12,19 +13,22 @@ import ResultHeader from "./ResultHeader.astro";
   </section>
 </section>
 
-<template id="cardTemplate">
-  <section class="card">
-    <section class="image"><img alt=""></section>
-    <section class="info">
-      <h2 class="title"></h2>
-      <section class="sub">
-        <h4 class="manuf"></h4>
+<template id="card-template">
+  <a href="">
+    <section class="card">
+      <section class="image"><img alt=""></section>
+      <section class="info">
+        <h2 class="title"></h2>
+        <section class="sub">
+          <h4 class="manuf"></h4>
+        </section>
+        <div class="rating">
+          <p></p>
+        </div>
       </section>
-      <div class="rating">
-        <p></p>
-      </div>
+      <Triangle class="bg-tri"></Triangle>
     </section>
-  </section>
+  </a>
 </template>
 
 <script>
@@ -37,17 +41,19 @@ import ResultHeader from "./ResultHeader.astro";
   }
 
   function createGridCard(input) {
-    const template = document.getElementById('cardTemplate') as HTMLTemplateElement
+    const template = document.getElementById('card-template') as HTMLTemplateElement
     const content = template?.content.cloneNode(true) as HTMLElement
 
     const img = content.querySelector('img')!
     const title = content.querySelector('.title')!
     const manuf = content.querySelector('.manuf')!
     const rating = content.querySelector('.rating p')!
+    const anchor = content.querySelector('a')!
 
     img.src = input.product_image ? input.product_image : "/img/syppi-typsi-bw-o.svg"
     title.innerHTML = input.name
     manuf.innerHTML = input.producer
+    anchor.href = `/drink/${input.id}`
 
     if (input.rating) {
       rating.innerHTML = `${input.rating}/100`
@@ -94,8 +100,15 @@ import ResultHeader from "./ResultHeader.astro";
     }
   }
 
+  a {
+      text-decoration: none;
+      color: inherit;
+    }
+
   .card {
     display: grid;
+    position: relative;
+    overflow: hidden;
     grid-template-columns: 100px auto;
     align-items: end;
     gap: 8px;
@@ -145,6 +158,20 @@ import ResultHeader from "./ResultHeader.astro";
     .sub {
       display: flex;
       justify-content: space-between;
+    }
+
+    .bg-tri {
+      position: absolute;
+      top: -35px;
+      right: -12px;
+      height: 120px;
+      width: auto;
+      color: color-mix(in oklab, var(--color-primary) 40%, var(--color-001) 60%);
+      transition: color 75ms ease-in-out;
+    }
+
+    &:hover .bg-tri {
+      color: var(--color-primary);
     }
   }
 </style>
