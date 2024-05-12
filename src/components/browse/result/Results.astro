@@ -20,10 +20,10 @@ import ResultHeader from "./ResultHeader.astro";
       <section class="sub">
         <h4 class="manuf"></h4>
       </section>
+      <div class="rating">
+        <p></p>
+      </div>
     </section>
-    <div class="rating">
-      <p></p>
-    </div>
   </section>
 </template>
 
@@ -58,43 +58,6 @@ import ResultHeader from "./ResultHeader.astro";
     return content
   }
 
-  // function createGridCard(input) {
-  //   const card = document.createElement('section')
-  //   const image = document.createElement('section')
-  //   const img = document.createElement('img')
-  //   const info = document.createElement('section')
-  //   const rating = document.createElement('div')
-  //   const title = document.createElement('h2')
-  //   const sub = document.createElement('section')
-  //   const manuf = document.createElement('h4')
-  //   const ratetext = document.createElement('p')
-    
-  //   card.classList.add('card')
-  //   image.classList.add('image')
-  //   info.classList.add('info')
-  //   rating.classList.add('rating')
-  //   title.classList.add('title')
-  //   sub.classList.add('sub')
-  //   manuf.classList.add('manuf')
-
-  //   card.append(image, info, rating)
-  //   image.appendChild(img)
-  //   info.append(title, sub)
-  //   sub.appendChild(manuf)
-  //   rating.appendChild(ratetext)
-
-  //   title.innerHTML = input.name
-  //   manuf.innerHTML = input.producer
-  //   if (input.rating) {
-  //     ratetext.innerHTML = `${input.rating}/100`
-  //   } else {
-  //     ratetext.innerHTML = `?/100`
-  //   }
-  //   img.src = input.product_image ? input.product_image : "/img/syppi-typsi-bw-o.svg"
-    
-  //   return card
-  // }
-
   const drinksData = await fetch("http://localhost:3000/drinks", {
     method: 'GET'
   }).then(response => response.json())
@@ -121,7 +84,7 @@ import ResultHeader from "./ResultHeader.astro";
 
   .results {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
     grid-auto-rows: min-content;
     gap: 16px;
     background-color: var(--color-002);
@@ -133,7 +96,7 @@ import ResultHeader from "./ResultHeader.astro";
 
   .card {
     display: grid;
-    grid-template-columns: 100px auto min-content;
+    grid-template-columns: 100px auto;
     align-items: end;
     gap: 8px;
     height: 200px;
