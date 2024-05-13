@@ -1,0 +1,67 @@
+---
+const { data } = Astro.props;
+
+function parse(input, suffix: string) {
+	if (input === null || input === undefined) {
+		return "No data";
+	}
+	return `${input}${suffix}`;
+}
+---
+
+<section class="nut-list">
+  <section class="dp detail">
+    <p>Energy:</p>
+    <p>{`${parse(data.energy.kJ,'kJ')} / ${parse(data.energy.kcal,'kcal')}`}</p>
+  </section>
+  <section class="dp">
+    <p>Fat:</p>
+    <p>{`${parse(data.fat,'g')}`}</p>
+  </section>
+  <section class="dp indent">
+    <p>Saturated fat:</p>
+    <p>{`${parse(data.sat_fat,'g')}`}</p>
+  </section>
+  <section class="dp">
+    <p>Carbs:</p>
+    <p>{`${parse(data.carbs,'g')}`}</p>
+  </section>
+  <section class="dp indent">
+    <p>Sugar:</p>
+    <p>{`${parse(data.sugar,'g')}`}</p>
+  </section>
+  <section class="dp">
+    <p>Protein:</p>
+    <p>{`${parse(data.protein,'g')}`}</p>
+  </section>
+  <section class="dp">
+    <p>Fiber:</p>
+    <p>{`${parse(data.fiber,'g')}`}</p>
+  </section>
+  <section class="dp">
+    <p>Salt:</p>
+    <p>{`${parse(data.salt,'g')}`}</p>
+  </section>
+</section>
+
+<style lang="scss">
+  .nut-list {
+    display: flex;
+    flex-direction: column;
+    gap: .2em;
+  }
+  .indent {
+    padding-left: 1em;
+  }
+  .dp {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.15em;
+    p:nth-child(1) {
+      font-weight: 500;
+    }
+    p:nth-child(2) {
+      font-weight: 300;
+    }
+  }
+</style>

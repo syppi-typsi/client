@@ -1,5 +1,6 @@
 ---
 import ArrowLeftTail from "../icon/ArrowLeftTail.astro";
+import Nutrition from "./Nutrition.astro";
 
 const { data } = Astro.props;
 
@@ -37,6 +38,13 @@ function nullDesc(input: string) {
 	}
 	return input;
 }
+
+function parseNutrition(input) {
+	if (input === undefined) {
+		return "N/A";
+	}
+	return `${input}ml`;
+}
 ---
 
 <section class="container">
@@ -73,10 +81,15 @@ function nullDesc(input: string) {
           <p>Avalibility</p>
           <p>{replaceNull(data.places)}</p>
         </div>
-        <div class="detail">
-          <p>Nutritional value</p>
-          <p>{replaceNull(data.places)}</p>
-        </div>
+        {
+          data.nutritional_value !== null && 
+            <hr>
+            <div class="detail">
+              <p>Nutritional value</p>
+              <p>per {parseNutrition(data.nutritional_value.serving)}:</p>
+            </div>
+            <Nutrition data={data.nutritional_value}></Nutrition>
+        }
       </section>
     </section>
   </main>
@@ -162,7 +175,13 @@ function nullDesc(input: string) {
         color: var(--color-005);
       }
       .details {
-        
+        display: flex;
+        flex-direction: column;
+        gap: .4em;
+
+        hr {
+          margin: .5em 0;
+        }
       }
       .detail {
         display: flex;
@@ -171,6 +190,9 @@ function nullDesc(input: string) {
         font-size: 1.4rem;
         p:nth-child(1) {
           font-weight: 700;
+        }
+        p:nth-child(2) {
+          font-weight: 400;
         }
       }
     }
