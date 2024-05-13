@@ -1,0 +1,178 @@
+---
+import ArrowLeftTail from "../icon/ArrowLeftTail.astro";
+
+const { data } = Astro.props;
+
+const categoryData = await fetch(
+	`http://localhost:3000/categories/${data.category}`,
+	{
+		method: "GET",
+	},
+).then((response) => response.json());
+
+const volumesText = (() => {
+	if (data.volumes === null || data.volumes.length === 0) {
+		return replaceNull(null);
+	}
+	return data.volumes
+		.map((vol) => {
+			if (vol >= 1000) {
+				return `${vol / 1000}L`;
+			}
+			return `${vol}ml`;
+		})
+		.join(", ");
+})();
+
+function replaceNull(input: string) {
+	if (input === null) {
+		return "No data";
+	}
+	return input;
+}
+
+function nullDesc(input: string) {
+	if (input === null) {
+		return "(No description)";
+	}
+	return input;
+}
+---
+
+<section class="container">
+  <section class="back">
+    <p>{categoryData.name} / {data.name}</p>
+    <a href="/"><ArrowLeftTail/><strong>Back</strong></a>
+  </section>
+  <main class="content">
+    <section class="image">
+      <img src={data.product_image || "/img/syppi-typsi-bw-o.svg"} alt="">
+    </section>
+    <section class="info">
+      <section class="titles">
+        <img src="/img/syppi-typsi-bw-o.svg" alt="" class="logo">
+        <!-- <Triangle class="logo"></Triangle> -->
+        <h2 class="name">{data.name}</h2>
+        <h3 class="producer">{data.producer}</h3>
+      </section>
+      <p class="desc">{nullDesc(data.description)}</p>
+      <section class="details">
+        <div class="detail">
+          <p>Brand</p>
+          <p>{replaceNull(data.brand)}</p>
+        </div>
+        <div class="detail">
+          <p>ABV</p>
+          <p>{replaceNull((data.abv*100).toString())}%</p>
+        </div>
+        <div class="detail">
+          <p>Volumes</p>
+          <p>{volumesText}</p>
+        </div>
+        <div class="detail">
+          <p>Avalibility</p>
+          <p>{replaceNull(data.places)}</p>
+        </div>
+        <div class="detail">
+          <p>Nutritional value</p>
+          <p>{replaceNull(data.places)}</p>
+        </div>
+      </section>
+    </section>
+  </main>
+</section>
+
+<style lang="scss">
+  .container {
+    display: grid;
+    grid-template-rows: min-content auto;
+    margin-inline: auto;
+    width: min(110ch, 100% - 14rem);
+    min-height: 100%;
+  }
+
+  .back {
+    display: grid;
+    gap: .3em;
+    padding-top: 1em;
+    font-size: 1.2em;
+    color: var(--color-004);
+    a {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: .4rem;
+      width: min-content;
+      white-space: nowrap;
+      font-size: 1.3em;
+      text-decoration: none;
+      color: var(--color-005);
+    }
+  }
+
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100%;
+
+    .image {
+      width: 100%;
+      height: 100%;
+      padding: 4rem;
+      box-sizing: border-box;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      height: min-content;
+      gap: 1.2rem;
+
+      .titles {
+        position: relative;
+      }
+      .logo {
+        z-index: -5;
+        user-select: none;
+        position: absolute;
+        top: -10px;
+        right: 0;
+        transform: rotate(-15deg);
+        opacity: 0.15;
+        height: 20rem;
+      }
+      .name {
+        font-size: 2.8rem;
+        font-weight: 650;
+      }
+      .producer {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--color-005);
+      }
+      .desc {
+        font-weight: 500;
+        color: var(--color-005);
+      }
+      .details {
+        
+      }
+      .detail {
+        display: flex;
+        justify-content: space-between;
+        gap: 1em;
+        font-size: 1.4rem;
+        p:nth-child(1) {
+          font-weight: 700;
+        }
+      }
+    }
+  }
+</style>
