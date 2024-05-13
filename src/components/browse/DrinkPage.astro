@@ -11,9 +11,16 @@ const categoryData = await fetch(
 	},
 ).then((response) => response.json());
 
+const placeData =
+	data.places !== null
+		? await fetch(`http://localhost:3000/places/${data.places}`, {
+				method: "GET",
+			}).then((response) => response.json())
+		: {};
+
 const volumesText = (() => {
 	if (data.volumes === null || data.volumes.length === 0) {
-		return replaceNull(null);
+		return replaceMissing(null);
 	}
 	return data.volumes
 		.map((vol) => {
@@ -25,18 +32,11 @@ const volumesText = (() => {
 		.join(", ");
 })();
 
-function replaceNull(input: string) {
-	if (input === null) {
-		return "No data";
+function replaceMissing(input: string, other = "No data", suffix = "") {
+	if (input === null || input === undefined) {
+		return other;
 	}
-	return input;
-}
-
-function nullDesc(input: string) {
-	if (input === null) {
-		return "(No description)";
-	}
-	return input;
+	return `${input}${suffix}`;
 }
 
 function parseNutrition(input) {
@@ -63,15 +63,19 @@ function parseNutrition(input) {
         <h2 class="name">{data.name}</h2>
         <h3 class="producer">{data.producer}</h3>
       </section>
-      <p class="desc">{nullDesc(data.description)}</p>
+      <p class="desc">{replaceMissing(data.description, "(No description)")}</p>
       <section class="details">
         <div class="detail">
+          <p>Rating</p>
+          <p>{replaceMissing(data.rating,"No data","/100")}</p>
+        </div>
+        <div class="detail">
           <p>Brand</p>
-          <p>{replaceNull(data.brand)}</p>
+          <p>{replaceMissing(data.brand)}</p>
         </div>
         <div class="detail">
           <p>ABV</p>
-          <p>{replaceNull((data.abv*100).toString())}%</p>
+          <p>{replaceMissing((data.abv*100).toString())}%</p>
         </div>
         <div class="detail">
           <p>Volumes</p>
@@ -79,14 +83,14 @@ function parseNutrition(input) {
         </div>
         <div class="detail">
           <p>Avalibility</p>
-          <p>{replaceNull(data.places)}</p>
+          <p>{replaceMissing(placeData.name)}</p>
         </div>
         {
           data.nutritional_value !== null && 
             <hr>
             <div class="detail">
               <p>Nutritional value</p>
-              <p>per {parseNutrition(data.nutritional_value.serving)}:</p>
+              <p>per {replaceMissing(data.nutritional_value.serving,"N/A","ml")}:</p>
             </div>
             <Nutrition data={data.nutritional_value}></Nutrition>
         }
