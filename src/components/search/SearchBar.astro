@@ -10,19 +10,23 @@ import MagGlass from "../icon/MagGlass.astro";
     <input type="search" placeholder="Search for drinks, categories & more..."></input>
   </div>
   <div class="right">
-    <ArrowRight></ArrowRight>
+    <button class="return">
+      <ArrowRight></ArrowRight>
+    </button>
   </div>
 </section>
 
 <script>
   const searchbox = document.querySelector('.search-bar input[type="search"]')!
 
-  console.log(location.pathname);
   if (location.pathname !== '/') {
     searchbox.addEventListener('keypress', async (e) => {
       if (e.key === 'Enter') {
         window.location.href = '/'
       }
+    })
+    document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
+      window.location.href = '/'
     })
   }
 </script>
@@ -52,14 +56,6 @@ import MagGlass from "../icon/MagGlass.astro";
       align-items: center;
       min-width: 0;
       width: 100%;
-      // p {
-      //   overflow: hidden;
-      //   text-overflow: ellipsis;
-      //   white-space: nowrap;
-      //   font-size: 1.5em;
-      //   color: var(--color-004);
-      //   font-weight: 500;
-      // }
     }
     
     svg {
@@ -84,6 +80,17 @@ import MagGlass from "../icon/MagGlass.astro";
       background: transparent;
       text-overflow: ellipsis;
       min-width: 0;
+    }
+
+    .return {
+      border: none;
+      background: none;
+      padding: 0;
+      height: 100%;
+
+      :hover {
+        color: var(--color-primary);
+      }
     }
   }
 </style>

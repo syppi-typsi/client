@@ -148,6 +148,11 @@ import ResultHeader from "./ResultHeader.astro";
         await updateResults()
       }
     })
+
+    document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
+      clearTimeout(timer)
+      await updateResults()
+    })
   }
   observeInputs()
 </script>
