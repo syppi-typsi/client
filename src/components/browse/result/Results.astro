@@ -34,6 +34,7 @@ import ResultHeader from "./ResultHeader.astro";
 <script>
   const ordering = document.querySelector('.view .select select')!
   const filters = document.querySelector('.filters-container')!
+  const searchbox = document.querySelector('.search-bar input[type="search"]')!
 
   function getSelectedIDs() {
     return Array.from(document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]:checked`)).map(obj => {
@@ -43,7 +44,7 @@ import ResultHeader from "./ResultHeader.astro";
     })
   }
 
-  function createGridCard(input) {
+  function createGridCard(input: { product_image: string; name: string; producer: string; id: any; rating: any }) {
     const template = document.getElementById('card-template') as HTMLTemplateElement
     const content = template?.content.cloneNode(true) as HTMLElement
 
@@ -68,7 +69,7 @@ import ResultHeader from "./ResultHeader.astro";
   }
 
   // https://stackoverflow.com/a/61511955
-  function waitForElm(selector) {
+  function waitForElm(selector: string) {
     return new Promise(resolve => {
         if (document.querySelector(selector)) {
             return resolve(document.querySelector(selector));
@@ -94,7 +95,7 @@ import ResultHeader from "./ResultHeader.astro";
       method: 'POST',
       body: JSON.stringify(
         {
-          "search": "",
+          "search": searchbox.value,
           "limit": 100,
           "page": 1,
           "filters": {
@@ -130,6 +131,22 @@ import ResultHeader from "./ResultHeader.astro";
 
     ordering.addEventListener('input', async () => {
       await updateResults()
+    })
+
+    let timer: number | undefined;
+
+    searchbox.addEventListener('input', () => {
+      clearTimeout(timer)
+      timer = setTimeout(async () => {
+        await updateResults()
+      }, 1000)
+    })
+
+    searchbox.addEventListener('keypress', async (e) => {
+      if (e.key === 'Enter') {
+        clearTimeout(timer)
+        await updateResults()
+      }
     })
   }
   observeInputs()

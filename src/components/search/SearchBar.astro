@@ -14,6 +14,19 @@ import MagGlass from "../icon/MagGlass.astro";
   </div>
 </section>
 
+<script>
+  const searchbox = document.querySelector('.search-bar input[type="search"]')!
+
+  console.log(location.pathname);
+  if (location.pathname !== '/') {
+    searchbox.addEventListener('keypress', async (e) => {
+      if (e.key === 'Enter') {
+        window.location.href = '/'
+      }
+    })
+  }
+</script>
+
 <style lang="scss">
   .search-bar {
     width: 600px;
