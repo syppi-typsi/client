@@ -35,7 +35,7 @@ import Collapsible from "./Collapsible.astro";
   }
 
   function getChildren(id: number | null) {
-    return categoriesData.filter(obj => obj.parent === id)
+    return categoriesData.filter((obj: { parent: number; }) => obj.parent === id)
   }
   
   function createCheckbox(name: string, id: number) {
@@ -81,31 +81,31 @@ import Collapsible from "./Collapsible.astro";
     selectedText.filters.innerHTML = generateSelected(checked.filters.length);
   }
   
-  function changeAllChildren(element: Element) {
+  function changeAllChildren(element: HTMLInputElement) {
     const children = element.closest(".cb-container")!.querySelectorAll(`.children input[type="checkbox"]`)
     children.forEach((child) => {
-      child.checked = element.checked
+      (child as HTMLInputElement).checked = element.checked
     })
   }
   
-  function uncheckParents(element: Element) {
+  function uncheckParents(element: HTMLInputElement) {
     if (!element.checked) {
       const parent = element.closest(".cb-container")!.parentElement!
       if (parent.className !== "checkboxes") {
-        const parentBox = parent.closest(".cb-container")!.querySelector(`input[type="checkbox"]`)!
+        const parentBox: HTMLInputElement = parent.closest(".cb-container")!.querySelector(`input[type="checkbox"]`)!
         parentBox.checked = false;
         uncheckParents(parentBox)
       }
     }
   }
   
-  function allSiblingsChecked(element: Element) {
+  function allSiblingsChecked(element: HTMLInputElement) {
     if (element.checked) {
       const parent = element.closest(".cb-container")!.parentElement!
       if (parent.className !== "checkboxes") {
-        const parentBox = parent.closest(".cb-container")!.querySelector(`input[type="checkbox"]`)!
+        const parentBox: HTMLInputElement = parent.closest(".cb-container")!.querySelector(`input[type="checkbox"]`)!
         const children = parent.querySelectorAll(`.children input[type="checkbox"]`)
-        if (Array.from(children).every((el) => el.checked)) {
+        if (Array.from(children).every((el) => (el as HTMLInputElement).checked)) {
           parentBox.checked = true
           allSiblingsChecked(parentBox)
         }
@@ -123,9 +123,9 @@ import Collapsible from "./Collapsible.astro";
   Object.values(checks).forEach((value) => {
     value.forEach((element) => {
       element.addEventListener("change", () => {
-        changeAllChildren(element)
-        uncheckParents(element)
-        allSiblingsChecked(element)
+        changeAllChildren(element as HTMLInputElement)
+        uncheckParents(element as HTMLInputElement)
+        allSiblingsChecked(element as HTMLInputElement)
         checked = updateChecked(":checked")
         updateCheckedText()
       })

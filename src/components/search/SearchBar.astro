@@ -21,7 +21,7 @@ import MagGlass from "../icon/MagGlass.astro";
 
   if (location.pathname !== '/') {
     searchbox.addEventListener('keypress', async (e) => {
-      if (e.key === 'Enter') {
+      if ((e as KeyboardEvent).key === 'Enter') {
         window.location.href = '/'
       }
     })

@@ -23,7 +23,7 @@ const volumesText = (() => {
 		return replaceMissing(null);
 	}
 	return data.volumes
-		.map((vol) => {
+		.map((vol: number) => {
 			if (vol >= 1000) {
 				return `${vol / 1000}L`;
 			}
@@ -32,18 +32,11 @@ const volumesText = (() => {
 		.join(", ");
 })();
 
-function replaceMissing(input: string, other = "No data", suffix = "") {
+function replaceMissing(input: string | null, other = "No data", suffix = "") {
 	if (input === null || input === undefined) {
 		return other;
 	}
 	return `${input}${suffix}`;
-}
-
-function parseNutrition(input) {
-	if (input === undefined) {
-		return "N/A";
-	}
-	return `${input}ml`;
 }
 ---
 

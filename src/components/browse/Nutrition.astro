@@ -1,7 +1,7 @@
 ---
 const { data } = Astro.props;
 
-function parse(input, suffix: string) {
+function parse(input: string, suffix: string) {
 	if (input === null || input === undefined) {
 		return "No data";
 	}

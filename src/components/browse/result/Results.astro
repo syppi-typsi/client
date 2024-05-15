@@ -32,9 +32,9 @@ import ResultHeader from "./ResultHeader.astro";
 </template>
 
 <script>
-  const ordering = document.querySelector('.view .select select')!
+  const ordering: HTMLInputElement = document.querySelector('.view .select select')!
   const filters = document.querySelector('.filters-container')!
-  const searchbox = document.querySelector('.search-bar input[type="search"]')!
+  const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
 
   function getSelectedIDs() {
     return Array.from(document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]:checked`)).map(obj => {
