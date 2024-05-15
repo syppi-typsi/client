@@ -2,7 +2,7 @@
 import Collapsible from "./Collapsible.astro";
 ---
 
-<section class="container">
+<section class="filters-container">
   <Collapsible title="Categories" class="categories" open>
     <section class="checkboxes">
     </section>
@@ -14,7 +14,7 @@ import Collapsible from "./Collapsible.astro";
 <template id="checkboxTemplate">
   <section class="cb-container">
     <div class="center">
-      <input type="checkbox">
+      <input type="checkbox" checked>
       <label></label>
     </div>
     <div class="children">
@@ -48,6 +48,7 @@ import Collapsible from "./Collapsible.astro";
 
     checkbox.id = `category-checkbox-${id.toString()}`
     checkbox.name = name
+    checkbox.dataset.categoryId = id.toString()
     label.htmlFor = `category-checkbox-${id.toString()}`
     label.innerHTML = name
 
@@ -135,7 +136,7 @@ import Collapsible from "./Collapsible.astro";
 </script>
 
 <style lang="scss">
-  .container {
+  .filters-container {
     z-index: 10;
     background-color: var(--color-001);
     color: var(--color-005);
