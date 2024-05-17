@@ -25,7 +25,6 @@ const userRating = await fetch(`http://localhost:3000/drinks/${data.id}/rate`, {
 	.catch(() => {
 		return {};
 	});
-console.log(userRating);
 
 const volumesText = (() => {
 	if (data.volumes === null || data.volumes.length === 0) {
@@ -110,7 +109,6 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
 
 <script>
   const ratingInput = document.querySelector('.info .rating .user input[type="number"]') as HTMLInputElement;
-  console.log(ratingInput)
 
   async function sendRating() {
     const id = ratingInput.dataset.drinkId
