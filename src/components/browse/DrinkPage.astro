@@ -18,6 +18,15 @@ const placeData =
 			}).then((response) => response.json())
 		: {};
 
+const userRating = await fetch(`http://localhost:3000/drinks/${data.id}/rate`, {
+	method: "GET",
+})
+	.then((response) => response.json())
+	.catch(() => {
+		return {};
+	});
+console.log(userRating);
+
 const volumesText = (() => {
 	if (data.volumes === null || data.volumes.length === 0) {
 		return replaceMissing(null);
@@ -50,18 +59,25 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
       <img src={data.product_image || "/img/syppi-typsi-bw-o.svg"} alt="">
     </section>
     <section class="info">
-      <section class="titles">
+      <section class="top">
         <img src="/img/syppi-typsi-bw-o.svg" alt="" class="logo">
-        <!-- <Triangle class="logo"></Triangle> -->
-        <h2 class="name">{data.name}</h2>
-        <h3 class="producer">{data.producer}</h3>
+        <section class="titles">
+          <h2 class="name">{data.name}</h2>
+          <h3 class="producer">{data.producer}</h3>
+        </section>
+        <section class="rating">
+          <h2 class="avg">{replaceMissing(data.rating,"No data","/100")}</h2>
+          <p>Your rating:</p>
+          <section class="user">
+            <input type="number" name="rating" id="rating" min="0" max="100" maxlength="2" placeholder="?" value={userRating.rating} data-drink-id={data.id}>
+            <h2>
+              /100
+            </h2>
+          </section>
+        </section>
       </section>
       <p class="desc">{replaceMissing(data.description, "(No description)")}</p>
       <section class="details">
-        <div class="detail">
-          <p>Rating</p>
-          <p>{replaceMissing(data.rating,"No data","/100")}</p>
-        </div>
         <div class="detail">
           <p>Brand</p>
           <p>{replaceMissing(data.brand)}</p>
@@ -91,6 +107,54 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
     </section>
   </main>
 </section>
+
+<script>
+  const ratingInput = document.querySelector('.info .rating .user input[type="number"]') as HTMLInputElement;
+  console.log(ratingInput)
+
+  async function sendRating() {
+    const id = ratingInput.dataset.drinkId
+    const secret = localStorage.getItem('secret')
+    const value = ratingInput.value
+    if (Number(value) < 0 || Number(value) > 100) {
+      return false
+    }
+    if (value === '') {
+      await fetch(`http://localhost:3000/drinks/${id}/rate`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${secret}`
+        }
+      }).catch(() => window.location.href = '/oops')
+      return true
+    }
+    await fetch(`http://localhost:3000/drinks/${id}/rate`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${secret}`
+      },
+      body: JSON.stringify(
+        {
+          "rating": value,
+        }
+      )
+    }).catch(() => window.location.href = '/oops')
+    return true
+  }
+
+  ratingInput?.addEventListener('keypress', async (e) => {
+    if ((e as KeyboardEvent).key === 'Enter') {
+      if (await sendRating()) {
+        window.location.reload()
+      }
+    }
+  })
+  ratingInput.addEventListener('focusout', async (e) => {
+    if (await sendRating()) {
+      window.location.reload()
+    }
+  })
+</script>
 
 <style lang="scss">
   .container {
@@ -146,9 +210,48 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
       gap: 1.2rem;
       padding-bottom: 5em;
 
-      .titles {
+      .top {
+        display: grid;
+        grid-template-columns: auto min-content;
+        gap: 2em;
         position: relative;
+
+        .rating {
+          display: flex;
+          flex-direction: column;
+          align-items: end;
+          gap: 2px;
+          * {
+            white-space: nowrap;
+          }
+          .avg {
+            font-weight: 450;
+            font-size: 2.8em;
+          }
+          .user {
+            display: flex;
+            align-items: baseline;
+            gap: .5ch;
+            input[type="number"] {
+              -moz-appearance: textfield;
+              font-size: 1.5rem;
+              background: var(--color-002);
+              border: 2px solid var(--color-003);
+              width: 3ch;
+              padding: 1px 4px;
+              font-weight: 500;
+              border-radius: var(--element-border-radius);
+              text-align: center;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }
+          }
+        }
       }
+
       .logo {
         z-index: -5;
         user-select: none;
