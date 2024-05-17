@@ -1,23 +1,9 @@
 ---
-import DrinkPage from "../../components/browse/DrinkPage.astro";
-import Header from "../../components/header/Header.astro";
-import "../../styles/palette.scss";
-import "../../styles/sizes.scss";
-
-export const prerender = false;
-
-const { id } = Astro.params;
-
-let drinksData: JSON;
-
-try {
-	drinksData = await fetch(`http://localhost:3000/drinks/${id}`, {
-		method: "GET",
-	}).then((response) => response.json());
-} catch (error) {
-	console.log("oops");
-	return Astro.redirect("/oops");
-}
+import Header from "../components/header/Header.astro";
+// import BrowseView from "../components/browse/BrowseView.astro";
+import Oops from "../components/browse/Oops.astro";
+import "../styles/palette.scss";
+import "../styles/sizes.scss";
 ---
 
 <html lang="en">
@@ -26,11 +12,11 @@ try {
 		<link rel="icon" type="image/svg+xml" href="/favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>typsi🍹 - {drinksData.name}</title>
+		<title>typsi🍹</title>
 	</head>
 	<body>
 		<Header></Header>
-    <DrinkPage data={drinksData}></DrinkPage>
+    <Oops></Oops>
 	</body>
 </html>
 
@@ -52,7 +38,6 @@ try {
 		height: 100vh;
 		display: grid;
 		grid-template-rows: min-content auto;
-		gap: var(--pane-outline);
 		color: var(--color-text);
 		background-color: var(--color-001);
 		font-family: "Nunito";

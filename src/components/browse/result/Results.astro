@@ -104,7 +104,7 @@ import ResultHeader from "./ResultHeader.astro";
           "ordering": Number(ordering.value)
         }
       )
-    }).then(response => response.json())
+    }).then(response => response.json()).catch(() => window.location.href = '/oops')
 
     document.querySelector('.results')!.innerHTML = ''
 
@@ -202,6 +202,10 @@ import ResultHeader from "./ResultHeader.astro";
     // background-color: var(--color-002);
     outline: var(--pane-outline) solid var(--color-003);
 
+    * {
+      z-index: 10;
+    }
+
     .image {
       height: 100%;
       width: 100%;
@@ -245,6 +249,7 @@ import ResultHeader from "./ResultHeader.astro";
     }
 
     .bg-tri {
+      z-index: 0;
       position: absolute;
       top: -35px;
       right: -12px;

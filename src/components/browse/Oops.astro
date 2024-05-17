@@ -1,0 +1,38 @@
+---
+
+---
+
+<section class="oops">
+  <section class="large">
+    <h2 class="shruggie">¯\_(ツ)_/¯</h2>
+    <h3 class="title">Oops!</h3>
+  </section>
+  <p>We done goofed, sorry for the mess!</p>
+</section>
+
+<style lang="scss">
+  .oops {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .shruggie {
+    font-size: 4em;
+    color: var(--color-003);
+  }
+  .large {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+
+    * {
+      grid-area: 1/1/1/1;
+    }
+  }
+  .title {
+    font-size: 3em;
+  }
+</style>
