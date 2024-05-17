@@ -68,7 +68,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
           <h2 class="avg">{replaceMissing(data.rating,"No data","/100")}</h2>
           <p>Your rating:</p>
           <section class="user">
-            <input type="number" name="rating" id="rating" min="0" max="100" maxlength="2" placeholder="?" value={userRating.rating} data-drink-id={data.id}>
+            <input type="text" inputmode="numeric" pattern="[0-9]*" name="rating" id="rating" placeholder="?" autocomplete="off" value={userRating.rating} data-drink-id={data.id}>
             <h2>
               /100
             </h2>
@@ -108,16 +108,12 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
 </section>
 
 <script>
-  const ratingInput = document.querySelector('.info .rating .user input[type="number"]') as HTMLInputElement;
+  const ratingInput = document.querySelector('.info .rating .user input[type="text"]') as HTMLInputElement;
 
   async function sendRating() {
     const id = ratingInput.dataset.drinkId
     const secret = localStorage.getItem('secret')
-    const value = ratingInput.value
-    if (Number(value) < 0 || Number(value) > 100) {
-      return false
-    }
-    if (value === '') {
+    if (ratingInput.value === '') {
       await fetch(`http://localhost:3000/drinks/${id}/rate`, {
         method: 'DELETE',
         headers: {
@@ -125,6 +121,12 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
         }
       }).catch(() => window.location.href = '/oops')
       return true
+    }
+    
+    const value = +ratingInput.value
+    if (value < 0 || value > 100 || !Number.isInteger(value)) {
+      console.log(value);
+      return false
     }
     await fetch(`http://localhost:3000/drinks/${id}/rate`, {
       method: 'PUT',
@@ -230,7 +232,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
             display: flex;
             align-items: baseline;
             gap: .5ch;
-            input[type="number"] {
+            input[type="text"] {
               -moz-appearance: textfield;
               font-size: 1.5rem;
               background: var(--color-002);
