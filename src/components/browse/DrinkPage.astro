@@ -84,10 +84,10 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
           <p>Brand</p>
           <p>{replaceMissing(data.brand)}</p>
         </div>
-        <div class="detail">
+        {Astro.url.hostname.split(".")[0] === "typsi" && <div class="detail">
           <p>ABV</p>
           <p>{replaceMissing((data.abv*100).toString())}%</p>
-        </div>
+        </div>}
         <div class="detail">
           <p>Volumes</p>
           <p>{volumesText}</p>
