@@ -91,7 +91,7 @@ import ResultHeader from "./ResultHeader.astro";
   }
 
   async function updateResults() {
-    const drinksData = await fetch("http://localhost:3000/drinks/search", {
+    const drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/search`, {
       method: 'POST',
       body: JSON.stringify(
         {

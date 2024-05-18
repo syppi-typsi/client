@@ -5,7 +5,7 @@ import Nutrition from "./Nutrition.astro";
 const { data } = Astro.props;
 
 const categoryData = await fetch(
-	`http://localhost:3000/categories/${data.category}`,
+	`${import.meta.env.PUBLIC_API_URL}/categories/${data.category}`,
 	{
 		method: "GET",
 	},
@@ -13,14 +13,17 @@ const categoryData = await fetch(
 
 const placeData =
 	data.places !== null
-		? await fetch(`http://localhost:3000/places/${data.places}`, {
+		? await fetch(`${import.meta.env.PUBLIC_API_URL}/places/${data.places}`, {
 				method: "GET",
 			}).then((response) => response.json())
 		: {};
 
-const userRating = await fetch(`http://localhost:3000/drinks/${data.id}/rate`, {
-	method: "GET",
-})
+const userRating = await fetch(
+	`${import.meta.env.PUBLIC_API_URL}/drinks/${data.id}/rate`,
+	{
+		method: "GET",
+	},
+)
 	.then((response) => response.json())
 	.catch(() => {
 		return {};
@@ -114,7 +117,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
     const id = ratingInput.dataset.drinkId
     const secret = localStorage.getItem('secret')
     if (ratingInput.value === '') {
-      await fetch(`http://localhost:3000/drinks/${id}/rate`, {
+      await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/${id}/rate`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${secret}`
@@ -128,7 +131,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
       console.log(value);
       return false
     }
-    await fetch(`http://localhost:3000/drinks/${id}/rate`, {
+    await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/${id}/rate`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${secret}`

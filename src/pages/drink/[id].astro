@@ -11,7 +11,7 @@ const { id } = Astro.params;
 let drinksData: JSON;
 
 try {
-	drinksData = await fetch(`http://localhost:3000/drinks/${id}`, {
+	drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/${id}`, {
 		method: "GET",
 	}).then((response) => response.json());
 } catch (error) {

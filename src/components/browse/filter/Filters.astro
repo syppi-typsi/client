@@ -24,7 +24,7 @@ import Collapsible from "./Collapsible.astro";
 </template>
 
 <script>
-  const categoriesData = await fetch("http://localhost:3000/categories", {
+  const categoriesData = await fetch(`${import.meta.env.PUBLIC_API_URL}/categories`, {
     method: 'GET'
   }).then(response => response.json()).catch(() => window.location.href = '/oops')
   
