@@ -68,28 +68,6 @@ import ResultHeader from "./ResultHeader.astro";
     return content
   }
 
-  // https://stackoverflow.com/a/61511955
-  function waitForElm(selector: string) {
-    return new Promise(resolve => {
-        if (document.querySelector(selector)) {
-            return resolve(document.querySelector(selector));
-        }
-
-        const observer = new MutationObserver(mutations => {
-            if (document.querySelector(selector)) {
-                observer.disconnect();
-                resolve(document.querySelector(selector));
-            }
-        });
-
-        // If you get "parameter 1 is not of type 'Node'" error, see https://stackoverflow.com/a/77855838/492336
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-    });
-  }
-
   async function updateResults() {
     const drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/search`, {
       method: 'POST',
@@ -104,7 +82,12 @@ import ResultHeader from "./ResultHeader.astro";
           "ordering": Number(ordering.value)
         }
       )
-    }).then(response => response.json()).catch(() => window.location.href = '/oops')
+    }).then(response => response.json()).then(data => {
+      if (window.location.hostname.split(".")[0] === 'syppi') { // remove all alcoholic drinks when using syppi
+        data.result = data.result.filter((drink) => drink.abv === 0 || drink.abv === null)
+      }
+      return data
+    }).catch(() => window.location.href = '/oops')
 
     document.querySelector('.results')!.innerHTML = ''
 
@@ -112,10 +95,6 @@ import ResultHeader from "./ResultHeader.astro";
       document.querySelector('.results')?.appendChild(createGridCard(iterator))
     }
   }
-
-  waitForElm('.categories .checkboxes input[type="checkbox"]').then(async () => {
-    await updateResults()
-  })
 
   function observeInputs() {
     const config = {
