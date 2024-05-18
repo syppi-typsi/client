@@ -113,6 +113,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
 </section>
 
 <script>
+  import { navigate } from 'astro:transitions/client';
   async function sendRating(ratingInput) {
     const id = ratingInput.dataset.drinkId
     const secret = localStorage.getItem('secret')
@@ -122,7 +123,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
         headers: {
           Authorization: `Bearer ${secret}`
         }
-      }).catch(() => window.location.href = '/oops')
+      }).catch(() => navigate('/oops'))
       updateRating(id)
       return true
     }
@@ -141,7 +142,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
           "rating": value,
         }
       )
-    }).catch(() => window.location.href = '/oops')
+    }).catch(() => navigate('/oops'))
     
     await updateRating(id)
     

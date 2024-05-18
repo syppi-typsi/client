@@ -32,6 +32,7 @@ import ResultHeader from "./ResultHeader.astro";
 </template>
 
 <script>
+  import { navigate } from 'astro:transitions/client';
   function getSelectedIDs() {
     return Array.from(document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]:checked`)).map(obj => {
       if (obj instanceof HTMLElement) {
@@ -83,7 +84,7 @@ import ResultHeader from "./ResultHeader.astro";
         data.result = data.result.filter((drink) => drink.abv === 0 || drink.abv === null)
       }
       return data
-    }).catch(() => window.location.href = '/oops')
+    }).catch(() => navigate('/oops'))
 
     document.querySelector('.results')!.innerHTML = ''
 
@@ -92,12 +93,37 @@ import ResultHeader from "./ResultHeader.astro";
     }
   }
 
+  const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
+
+  function searchInit() {
+    const ordering: HTMLInputElement = document.querySelector('.view .select select')!
+    let timer: number | undefined;
+
+    document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
+      clearTimeout(timer)
+      await updateResults(searchbox, ordering)
+    })
+
+    searchbox.addEventListener('input', () => {
+      clearTimeout(timer)
+      timer = setTimeout(async () => {
+        await updateResults(searchbox, ordering)
+      }, 1000)
+    })
+
+    searchbox.addEventListener('keypress', async (e) => {
+      if (e.key === 'Enter') {
+        clearTimeout(timer)
+        await updateResults(searchbox, ordering)
+      }
+    })
+  }
+
   function observeInputs() {
     const config = {
       childList: true,
       subtree: true
     }
-    const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
     const ordering: HTMLInputElement = document.querySelector('.view .select select')!
     const filters = document.querySelector('.filters-container')!
 
@@ -114,29 +140,10 @@ import ResultHeader from "./ResultHeader.astro";
     ordering.addEventListener('input', async () => {
       await updateResults(searchbox, ordering)
     })
-
-    let timer: number | undefined;
-
-    searchbox.addEventListener('input', () => {
-      clearTimeout(timer)
-      timer = setTimeout(async () => {
-        await updateResults(searchbox, ordering)
-      }, 1000)
-    })
-
-    searchbox.addEventListener('keypress', async (e) => {
-      if (e.key === 'Enter') {
-        clearTimeout(timer)
-        await updateResults(searchbox, ordering)
-      }
-    })
-
-    document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
-      clearTimeout(timer)
-      await updateResults(searchbox, ordering)
-    })
   }
+
   observeInputs()
+  searchInit() // do not add to after-swap event listener, search input is already persistent
   document.addEventListener('astro:after-swap', () => {
     observeInputs()
   })

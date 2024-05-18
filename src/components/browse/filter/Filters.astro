@@ -24,6 +24,7 @@ import Collapsible from "./Collapsible.astro";
 </template>
 
 <script>
+  import { navigate } from 'astro:transitions/client';
   let categoriesData: Array<any>;
 
   const selectedSuffix = " selected";
@@ -35,7 +36,7 @@ import Collapsible from "./Collapsible.astro";
   async function getData() {
     return await fetch(`${import.meta.env.PUBLIC_API_URL}/categories`, {
       method: 'GET'
-    }).then(response => response.json()).catch(() => window.location.href = '/oops')
+    }).then(response => response.json()).catch(() => navigate('/oops'))
   }
 
   function getChildren(id: number | null) {
