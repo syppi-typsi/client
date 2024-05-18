@@ -1,44 +1,8 @@
 ---
-import Header from "../components/header/Header.astro";
+import Default from "../layouts/Default.astro";
 import Oops from "../components/browse/Oops.astro";
-import "../styles/palette.scss";
-import "../styles/sizes.scss";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.png" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>typsi🍹</title>
-	</head>
-	<body>
-		<Header></Header>
-    <Oops></Oops>
-	</body>
-</html>
-
-<style lang="scss" is:global>
-	@font-face {
-		font-family: "Nunito";
-		src: url("/fonts/Nunito-VariableFont_wght.ttf");
-	}
-
-	html {
-    scroll-behavior: smooth;
-  }
-
-  * {
-    margin: 0;
-  }
-
-	body {
-		height: 100vh;
-		display: grid;
-		grid-template-rows: min-content auto;
-		color: var(--color-text);
-		background-color: var(--color-001);
-		font-family: "Nunito";
-	}
-</style>
+<Default title="typsi🍹 - Oops!">
+	<Oops></Oops>
+</Default>
