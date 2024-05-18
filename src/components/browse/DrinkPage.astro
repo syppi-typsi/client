@@ -51,63 +51,65 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
 }
 ---
 
-<section class="container">
-  <section class="back">
-    <p>{categoryData.name} / {data.name}</p>
-    <a href="/"><ArrowLeftTail/><strong>Back</strong></a>
-  </section>
-  <main class="content">
-    <section class="image">
-      <img src={data.product_image || "/img/syppi-typsi-bw-o.svg"} alt="">
+<section class="full">
+  <section class="container">
+    <section class="back">
+      <p>{categoryData.name} / {data.name}</p>
+      <a href="/"><ArrowLeftTail/><strong>Back</strong></a>
     </section>
-    <section class="info">
-      <section class="top">
-        <img src="/img/syppi-typsi-bw-o.svg" alt="" class="logo">
-        <section class="titles">
-          <h2 class="name">{data.name}</h2>
-          <h3 class="producer">{data.producer}</h3>
-        </section>
-        <section class="rating">
-          <h2 class="avg">{replaceMissing(data.rating,"No data","/100")}</h2>
-          <p>Your rating:</p>
-          <section class="user">
-            <input type="text" inputmode="numeric" pattern="[0-9]*" name="rating" id="rating" placeholder="?" autocomplete="off" value={userRating.rating} data-drink-id={data.id}>
-            <h2>
-              /100
-            </h2>
+    <main class="content">
+      <section class="image">
+        <img src={data.product_image || "/img/syppi-typsi-bw-o.svg"} alt="">
+      </section>
+      <section class="info">
+        <section class="top">
+          <img src="/img/syppi-typsi-bw-o.svg" alt="" class="logo">
+          <section class="titles">
+            <h2 class="name">{data.name}</h2>
+            <h3 class="producer">{data.producer}</h3>
+          </section>
+          <section class="rating">
+            <h2 class="avg">{replaceMissing(data.rating,"No data","/100")}</h2>
+            <p>Your rating:</p>
+            <section class="user">
+              <input type="text" inputmode="numeric" pattern="[0-9]*" name="rating" id="rating" placeholder="?" autocomplete="off" value={userRating.rating} data-drink-id={data.id}>
+              <h2>
+                /100
+              </h2>
+            </section>
           </section>
         </section>
+        <p class="desc">{replaceMissing(data.description, "(No description)")}</p>
+        <section class="details">
+          <div class="detail">
+            <p>Brand</p>
+            <p>{replaceMissing(data.brand)}</p>
+          </div>
+          {Astro.url.hostname.split(".")[0] === "typsi" && <div class="detail">
+            <p>ABV</p>
+            <p>{replaceMissing((data.abv*100).toString())}%</p>
+          </div>}
+          <div class="detail">
+            <p>Volumes</p>
+            <p>{volumesText}</p>
+          </div>
+          <div class="detail">
+            <p>Avalibility</p>
+            <p>{replaceMissing(placeData.name)}</p>
+          </div>
+          {
+            data.nutritional_value !== null &&
+              <hr />
+              <div class="detail">
+                <p>Nutritional value</p>
+                <p>per {replaceMissing(data.nutritional_value.serving,"N/A","ml")}:</p>
+              </div>
+              <Nutrition data={data.nutritional_value}></Nutrition>
+          }
+        </section>
       </section>
-      <p class="desc">{replaceMissing(data.description, "(No description)")}</p>
-      <section class="details">
-        <div class="detail">
-          <p>Brand</p>
-          <p>{replaceMissing(data.brand)}</p>
-        </div>
-        {Astro.url.hostname.split(".")[0] === "typsi" && <div class="detail">
-          <p>ABV</p>
-          <p>{replaceMissing((data.abv*100).toString())}%</p>
-        </div>}
-        <div class="detail">
-          <p>Volumes</p>
-          <p>{volumesText}</p>
-        </div>
-        <div class="detail">
-          <p>Avalibility</p>
-          <p>{replaceMissing(placeData.name)}</p>
-        </div>
-        {
-          data.nutritional_value !== null && 
-            <hr>
-            <div class="detail">
-              <p>Nutritional value</p>
-              <p>per {replaceMissing(data.nutritional_value.serving,"N/A","ml")}:</p>
-            </div>
-            <Nutrition data={data.nutritional_value}></Nutrition>
-        }
-      </section>
-    </section>
-  </main>
+    </main>
+  </section>
 </section>
 
 <script>
@@ -178,12 +180,16 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
 </script>
 
 <style lang="scss">
+  .full {
+    width: 100%;
+    overflow-y: scroll;
+  }
   .container {
     display: grid;
-    grid-template-rows: min-content auto;
+    grid-template-rows: min-content 1fr;
     margin-inline: auto;
     width: min(110ch, 100% - 14rem);
-    min-height: 100%;
+    height: 100%;
   }
 
   .back {
@@ -212,8 +218,16 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
 
   .content {
     display: grid;
+    grid-template-areas: "image info"
+    ". info";
     grid-template-columns: repeat(auto-fit, minmax(30ch,1fr));
+    grid-template-rows: 100% auto;
     min-height: 100%;
+
+    @media only screen and (max-width: 1000px) {
+      grid-template-areas: "image"
+      "info";
+    }
 
     .image {
       width: 100%;

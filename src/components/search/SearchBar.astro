@@ -90,6 +90,11 @@ import MagGlass from "../icon/MagGlass.astro";
       background: transparent;
       text-overflow: ellipsis;
       min-width: 0;
+
+      &::-webkit-search-decoration,
+      &::-webkit-search-cancel-button,
+      &::-webkit-search-results-button,
+      &::-webkit-search-results-decoration { display: none; }
     }
 
     .return {
