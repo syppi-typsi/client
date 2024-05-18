@@ -4,10 +4,10 @@ import LightMode from "../../icon/LightMode.astro";
 ---
 
 
-<a href="#" id="killthelights">
+<button type="button" id="killthelights">
   <DarkMode class="moon"></DarkMode>
   <LightMode class="sun"></LightMode>
-</a>
+</button>
 
 <script>
   let darkMode = localStorage.getItem("darkMode");
@@ -39,8 +39,11 @@ import LightMode from "../../icon/LightMode.astro";
 </script>
 
 <style lang="scss">
-  a {
+  button {
     height: 70%;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
   svg {
     color: var(--color-text);

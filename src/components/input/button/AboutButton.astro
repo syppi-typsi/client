@@ -1,0 +1,27 @@
+---
+import Info from "../../icon/Info.astro";
+---
+
+
+<a href="/about">
+  <Info class="info"></Info>
+</a>
+
+<style lang="scss">
+  a {
+    height: 70%;
+  }
+  svg {
+    color: var(--color-text);
+    width: auto;
+    height: 100%;
+  }
+
+  body:not(.theme-dark) .sun {
+    color: black;
+  }
+
+  :root:has(body.theme-dark) .moon {
+    color: wheat;
+  }
+</style>
