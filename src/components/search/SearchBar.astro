@@ -3,7 +3,7 @@ import ArrowRight from "../icon/ArrowRightTail.astro";
 import MagGlass from "../icon/MagGlass.astro";
 ---
 
-<section class="search-bar">
+<section class="search-bar" transition:persist>
   <div class="left">
     <MagGlass></MagGlass>
     <!-- <p>Search for drinks, categories & more...</p> -->
@@ -17,18 +17,28 @@ import MagGlass from "../icon/MagGlass.astro";
 </section>
 
 <script>
-  const searchbox = document.querySelector('.search-bar input[type="search"]')!
+  import { navigate } from 'astro:transitions/client';
 
-  if (location.pathname !== '/') {
-    searchbox.addEventListener('keypress', async (e) => {
-      if ((e as KeyboardEvent).key === 'Enter') {
-        window.location.href = '/'
-      }
-    })
-    document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
-      window.location.href = '/'
-    })
+  function add() {
+      console.log(location.pathname);
+      const searchbox = document.querySelector('.search-bar input[type="search"]')!
+      searchbox.addEventListener('keypress', async (e) => {
+        if (location.pathname !== '/') {
+          if ((e as KeyboardEvent).key === 'Enter') {
+            navigate('/')
+          }
+        }
+      })
+      document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
+        if (location.pathname !== '/') {
+          navigate('/')
+        }
+      })
   }
+  add()
+  // document.addEventListener('astro:after-swap',() => {
+  //   add()
+  // })
 </script>
 
 <style lang="scss">

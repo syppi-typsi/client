@@ -4,7 +4,7 @@ import LightMode from "../../icon/LightMode.astro";
 ---
 
 
-<button type="button" id="killthelights">
+<button type="button" id="killthelights" transition:persist>
   <DarkMode class="moon"></DarkMode>
   <LightMode class="sun"></LightMode>
 </button>
@@ -23,9 +23,13 @@ import LightMode from "../../icon/LightMode.astro";
     localStorage.setItem("darkMode", "disabled");
   }
 
-  if (darkMode === "enabled") {
-    enableDarkMode();
+  function setTheme() {
+    if (darkMode === "enabled") {
+      enableDarkMode();
+    }
   }
+
+  setTheme()
 
   button?.addEventListener("click", () => {
     darkMode = localStorage.getItem("darkMode");
@@ -34,6 +38,10 @@ import LightMode from "../../icon/LightMode.astro";
     } else {
       disableDarkMode();
     }
+  })
+  document.addEventListener('astro:after-swap', () => {
+    darkMode = localStorage.getItem("darkMode");
+    setTheme()
   })
   
 </script>

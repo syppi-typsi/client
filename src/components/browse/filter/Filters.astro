@@ -24,14 +24,18 @@ import Collapsible from "./Collapsible.astro";
 </template>
 
 <script>
-  const categoriesData = await fetch(`${import.meta.env.PUBLIC_API_URL}/categories`, {
-    method: 'GET'
-  }).then(response => response.json()).catch(() => window.location.href = '/oops')
-  
+  let categoriesData: Array<any>;
+
   const selectedSuffix = " selected";
   const selectedText = {
     categories: document.querySelector(".categories .header .count")!,
     filters: document.querySelector(".filters .header .count")!
+  }
+
+  async function getData() {
+    return await fetch(`${import.meta.env.PUBLIC_API_URL}/categories`, {
+      method: 'GET'
+    }).then(response => response.json()).catch(() => window.location.href = '/oops')
   }
 
   function getChildren(id: number | null) {
@@ -76,7 +80,10 @@ import Collapsible from "./Collapsible.astro";
     }
   }
 
-  function updateCheckedText() {
+  function updateCheckedText(checked, selectedText) {
+    if (selectedText.categories === null && selectedText.filters === null) {
+      return
+    }
     selectedText.categories.innerHTML = generateSelected(checked.categories.length);
     selectedText.filters.innerHTML = generateSelected(checked.filters.length);
   }
@@ -113,26 +120,37 @@ import Collapsible from "./Collapsible.astro";
     }
   }
 
-  for (const iterator of getChildren(null)) {
-    document.querySelector('.checkboxes')?.appendChild(createCheckbox(iterator.name, iterator.id))
-  }
-  
-  const checks = updateChecked()
-  let checked = updateChecked(":checked")
-  
-  Object.values(checks).forEach((value) => {
-    value.forEach((element) => {
-      element.addEventListener("change", () => {
-        changeAllChildren(element as HTMLInputElement)
-        uncheckParents(element as HTMLInputElement)
-        allSiblingsChecked(element as HTMLInputElement)
-        checked = updateChecked(":checked")
-        updateCheckedText()
+  async function initialize() {
+    categoriesData = await getData() // get categories data
+
+    for (const iterator of getChildren(null)) { // for every root category
+      document.querySelector('.checkboxes')?.appendChild(createCheckbox(iterator.name, iterator.id)) // add it and its children to DOM
+    }
+
+    const selectedText = {
+      categories: document.querySelector(".categories .header .count"),
+      filters: document.querySelector(".filters .header .count")
+    }
+    
+    Object.values(updateChecked()).forEach((value) => {
+      value.forEach((element) => {
+        element.addEventListener("change", () => {
+          changeAllChildren(element as HTMLInputElement)
+          uncheckParents(element as HTMLInputElement)
+          allSiblingsChecked(element as HTMLInputElement)
+          updateCheckedText(updateChecked(":checked"),selectedText)
+        })
       })
     })
-  })
+    
+    updateCheckedText(updateChecked(":checked"),selectedText)
+  }
+
+  initialize()
   
-  updateCheckedText()
+  document.addEventListener('astro:after-swap', () => {
+    initialize()
+  })
 </script>
 
 <style lang="scss">

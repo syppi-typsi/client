@@ -32,10 +32,6 @@ import ResultHeader from "./ResultHeader.astro";
 </template>
 
 <script>
-  const ordering: HTMLInputElement = document.querySelector('.view .select select')!
-  const filters = document.querySelector('.filters-container')!
-  const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
-
   function getSelectedIDs() {
     return Array.from(document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]:checked`)).map(obj => {
       if (obj instanceof HTMLElement) {
@@ -68,7 +64,7 @@ import ResultHeader from "./ResultHeader.astro";
     return content
   }
 
-  async function updateResults() {
+  async function updateResults(searchbox, ordering) {
     const drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/search`, {
       method: 'POST',
       body: JSON.stringify(
@@ -101,15 +97,22 @@ import ResultHeader from "./ResultHeader.astro";
       childList: true,
       subtree: true
     }
+    const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
+    const ordering: HTMLInputElement = document.querySelector('.view .select select')!
+    const filters = document.querySelector('.filters-container')!
+
+    if (!searchbox || !ordering || !filters) {
+      return
+    }
 
     const observer = new MutationObserver(async () => {
-      await updateResults()
+      await updateResults(searchbox, ordering)
     });
-  
+
     observer.observe(filters, config)
 
     ordering.addEventListener('input', async () => {
-      await updateResults()
+      await updateResults(searchbox, ordering)
     })
 
     let timer: number | undefined;
@@ -117,23 +120,26 @@ import ResultHeader from "./ResultHeader.astro";
     searchbox.addEventListener('input', () => {
       clearTimeout(timer)
       timer = setTimeout(async () => {
-        await updateResults()
+        await updateResults(searchbox, ordering)
       }, 1000)
     })
 
     searchbox.addEventListener('keypress', async (e) => {
       if (e.key === 'Enter') {
         clearTimeout(timer)
-        await updateResults()
+        await updateResults(searchbox, ordering)
       }
     })
 
     document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
       clearTimeout(timer)
-      await updateResults()
+      await updateResults(searchbox, ordering)
     })
   }
   observeInputs()
+  document.addEventListener('astro:after-swap', () => {
+    observeInputs()
+  })
 </script>
 
 <style lang="scss">

@@ -111,9 +111,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
 </section>
 
 <script>
-  const ratingInput = document.querySelector('.info .rating .user input[type="text"]') as HTMLInputElement;
-
-  async function sendRating() {
+  async function sendRating(ratingInput) {
     const id = ratingInput.dataset.drinkId
     const secret = localStorage.getItem('secret')
     if (ratingInput.value === '') {
@@ -123,12 +121,12 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
           Authorization: `Bearer ${secret}`
         }
       }).catch(() => window.location.href = '/oops')
+      updateRating(id)
       return true
     }
     
     const value = +ratingInput.value
     if (value < 0 || value > 100 || !Number.isInteger(value)) {
-      console.log(value);
       return false
     }
     await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/${id}/rate`, {
@@ -142,20 +140,40 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
         }
       )
     }).catch(() => window.location.href = '/oops')
+    
+    await updateRating(id)
+    
     return true
   }
 
-  ratingInput?.addEventListener('keypress', async (e) => {
-    if ((e as KeyboardEvent).key === 'Enter') {
-      if (await sendRating()) {
-        window.location.reload()
+  async function updateRating(id) {
+    const drink = await fetch(
+      `${import.meta.env.PUBLIC_API_URL}/drinks/${id}`,
+      {
+        method: "GET",
+      },
+    ).then((response) => response.json())
+    const avgrating = document.querySelector('.rating .avg')
+    avgrating!.innerHTML = drink.rating === null ? 'No data' : `${drink.rating}/100`
+  }
+
+  function initialize() {
+    const ratingInput = document.querySelector('.info .rating .user input[type="text"]') as HTMLInputElement;
+    ratingInput?.addEventListener('keypress', async (e) => {
+      if ((e as KeyboardEvent).key === 'Enter') {
+        if (await sendRating(ratingInput)) {
+        }
       }
-    }
-  })
-  ratingInput.addEventListener('focusout', async (e) => {
-    if (await sendRating()) {
-      window.location.reload()
-    }
+    })
+    ratingInput?.addEventListener('focusout', async (e) => {
+      if (await sendRating(ratingInput)) {
+      }
+    })
+  }
+
+  initialize()
+  document.addEventListener('astro:after-swap', () => {
+    initialize()
   })
 </script>
 
