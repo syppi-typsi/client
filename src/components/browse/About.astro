@@ -2,39 +2,46 @@
 
 ---
 
-<section class="about">
-  <section class="logos">
-    <img class="theme-light" src="/img/syppilogo-black.svg" alt="" /><img class="theme-dark" src="/img/syppilogo-white.svg" alt="" />
-    <p class="slash">/</p>
-    <img class="theme-light" src="/img/typsilogo-black.svg" alt="" /><img class="theme-dark" src="/img/typsilogo-white.svg" alt="" />
-  </section>
-  <p class="moto"> A review platform for beverages </p>
-  <p class="desc">
-    Find the best drinks in town and let your opinion be heard. 
-    Search, filters, and sorting help you narrow your results.
-    typsi🍹 differs from syppi🧃 only in the inclusion of alcoholic drinks.
-    Remember, please drink responsibly.
-  </p>
-  <section class="horizontal">
-    <section class="madeBy">
-      <p>Made by 2nd-year <br> BCompSc students</p>
+<section class="container">
+  <section class="about">
+    <section class="logos">
+      <img class="theme-light" src="/img/syppilogo-black.svg" alt="" /><img class="theme-dark" src="/img/syppilogo-white.svg" alt="" />
+      <p class="slash">/</p>
+      <img class="theme-light" src="/img/typsilogo-black.svg" alt="" /><img class="theme-dark" src="/img/typsilogo-white.svg" alt="" />
     </section>
-    <section class="who">
-      <p>Oliver Jõgar</p>
-      <p>Matias Jürgenson</p>
-      <p>Joosep Hubel</p>
+    <p class="moto"> A review platform for beverages </p>
+    <p class="desc">
+      Find the best drinks in town and let your opinion be heard.
+      Search, filters, and sorting help you narrow your results.
+      typsi🍹 differs from syppi🧃 only in the inclusion of alcoholic drinks.
+      Remember, please drink responsibly.
+    </p>
+    <section class="horizontal">
+      <section class="madeBy">
+        <p>Proudly presented by second-year BCompSc students:</p>
+      </section>
+      <section class="who">
+        <p>Oliver Jõgar</p>
+        <p>Matias Jürgenson</p>
+        <p>Joosep Hubel</p>
+      </section>
     </section>
-  </section>
-  <p class="desc">
-    This project was part of the annual student project competition at the University of Tartu Institute of Computer Science in 2024.
-  </p>
-  <section class="ut">
-    <img class="theme-light" src="/img/ati.svg" alt="" /><img class="theme-dark" src="/img/ati.svg" alt="" />
-    <img class="theme-light" src="/img/utics.svg" alt="" /><img class="theme-dark" src="/img/utics.svg" alt="" />
+    <p class="desc">
+      This project took part in the annual student project competition at the University of Tartu Institute of Computer Science in 2024.
+    </p>
+    <section class="ut">
+      <img class="theme-light" src="/img/ati.svg" alt="" /><img class="theme-dark" src="/img/ati.svg" alt="" />
+      <img class="theme-light" src="/img/utics.svg" alt="" /><img class="theme-dark" src="/img/utics.svg" alt="" />
+    </section>
   </section>
 </section>
 
 <style lang="scss">
+  .container {
+    width: 100%;
+    overflow-y: scroll;
+  }
+
   .about {
     display: flex;
     flex-direction: column;
@@ -43,14 +50,17 @@
     justify-content: center;
     width: min(80ch, 100vw - 3em);
     margin-inline: auto;
+    padding: 8rem 0;
   }
   .logos {
     display: flex;
+    flex-basis: 0;
     justify-content: center;
-    width: 90%;
+    width: 100%;
     gap: 1em;
     img {
-      height: 100%;
+      min-height: 100%;
+      width: auto;
     }
   }
   .ut {
@@ -73,8 +83,9 @@
     color: var(--color-text);
   }
   .horizontal {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto min-content;
+    gap: 2em;
     min-width: 100%;
     color: var(--color-003);
     flex-wrap: wrap;
@@ -83,8 +94,9 @@
     justify-content: left;
     align-items: left;
     font-size: 1.8em;
+    font-weight: 500;
     color: var(--color-text);
-    // text-align: left;
+    text-align: right;
   }
   .who {
     font-size: 2.2em;
@@ -104,6 +116,7 @@
     font-size: 1.8em;
     color: var(--color-text);
     width: 100%;
+    text-align: justify;
   }
   
   body:not(.theme-dark) .theme-dark {
