@@ -150,7 +150,9 @@ import Collapsible from "./Collapsible.astro";
   initialize()
   
   document.addEventListener('astro:after-swap', () => {
-    initialize()
+    if (location.pathname === '/') {
+      initialize()
+    }
   })
 </script>
 

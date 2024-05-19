@@ -66,6 +66,14 @@ import ResultHeader from "./ResultHeader.astro";
   }
 
   async function updateResults(searchbox, ordering) {
+    let alcohol = false
+    if (window.location.hostname.split(".")[0] === 'typsi') { // allow alcoholic drinks when using typsi
+      alcohol = true
+    }
+    const filters = document.querySelector('.filters-container')!
+    if (!filters) {
+      return
+    }
     const drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/search`, {
       method: 'POST',
       body: JSON.stringify(
@@ -74,17 +82,13 @@ import ResultHeader from "./ResultHeader.astro";
           "limit": 100,
           "page": 1,
           "filters": {
-            "categories": getSelectedIDs()
+            "categories": getSelectedIDs(),
+            "alcohol": alcohol
           },
           "ordering": Number(ordering.value)
         }
       )
-    }).then(response => response.json()).then(data => {
-      if (window.location.hostname.split(".")[0] === 'syppi') { // remove all alcoholic drinks when using syppi
-        data.result = data.result.filter((drink) => drink.abv === 0 || drink.abv === null)
-      }
-      return data
-    }).catch(() => navigate('/oops'))
+    }).then(response => response.json()).catch(() => navigate('/oops'))
 
     document.querySelector('.results')!.innerHTML = ''
 
