@@ -7,8 +7,9 @@ import PageSelect from "./PageSelect.astro";
 ---
 
 <section class="header">
-  <div class="page">
+  <div class="result-info">
     <!-- <PageSelect></PageSelect> -->
+    <p></p>
   </div>
   <div class="view">
     <GenericSelect>
@@ -33,11 +34,14 @@ import PageSelect from "./PageSelect.astro";
     outline: var(--pane-outline) solid var(--color-003);
   }
 
-  .page {
+  .result-info {
+    display: flex;
+    align-items: center;
     height: 100%;
     * {
       color: var(--color-004);
-      font-weight: 600;
+      font-weight: 400;
+      font-size: 1.3em;
     }
   }
 

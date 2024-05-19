@@ -79,6 +79,7 @@ import ResultHeader from "./ResultHeader.astro";
   }
 
   async function loadNewPage() {
+    const limit = 20
     let alcohol = false
     if (window.location.hostname.split(".")[0] === 'typsi') { // allow alcoholic drinks when using typsi
       alcohol = true
@@ -92,7 +93,7 @@ import ResultHeader from "./ResultHeader.astro";
       body: JSON.stringify(
         {
           "search": document.querySelector('.search-bar input[type="search"]')!.value,
-          "limit": 20,
+          "limit": limit,
           "page": currentPage,
           "filters": {
             "categories": getSelectedIDs(),
@@ -106,6 +107,7 @@ import ResultHeader from "./ResultHeader.astro";
     for (const iterator of drinksData.result) {
       document.querySelector('.results')?.appendChild(createGridCard(iterator))
     }
+    document.querySelector('.result-info p')!.innerHTML = `${Math.min(limit*currentPage,drinksData.totalResults)}/${drinksData.totalResults} results`
   }
 
   async function handleInfiniteScroll() {
