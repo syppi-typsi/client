@@ -103,7 +103,6 @@ import ResultHeader from "./ResultHeader.astro";
       )
     }).then(response => response.json()).catch(() => navigate('/oops'))
     totalPages = drinksData.totalPages
-    const results = document.querySelector('.results')!
     for (const iterator of drinksData.result) {
       document.querySelector('.results')?.appendChild(createGridCard(iterator))
     }

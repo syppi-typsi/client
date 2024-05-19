@@ -1,0 +1,45 @@
+---
+import BeverageBox from "../../icon/BeverageBox.astro";
+import TropicalDrink from "../../icon/TropicalDrink.astro";
+---
+
+
+<button type="button" id="appmode" transition:persist>
+  <BeverageBox class="syppi"></BeverageBox>
+  <TropicalDrink class="typsi"></TropicalDrink>
+</button>
+
+<script>
+  const button = document.getElementById('appmode')
+  if (window.location.hostname.split(".")[0] === 'typsi') {
+    button.title = 'Switch to syppi!'
+    document.querySelector('.syppi')!.style.display = 'inherit'
+    button?.addEventListener('click', () => {
+      window.location.href = `${window.location.href.replace('typsi','syppi')}`
+    })
+  }
+  if (window.location.hostname.split(".")[0] === 'syppi') {
+    button.title = 'Switch to typsi!'
+    document.querySelector('.typsi')!.style.display = 'inherit'
+    button?.addEventListener('click', () => {
+      window.location.href = `${window.location.href.replace('syppi','typsi')}`
+    })
+  }
+</script>
+
+<style lang="scss">
+  button {
+    height: 70%;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  svg {
+    color: var(--color-text);
+    width: auto;
+    height: 100%;
+  }
+  .syppi, .typsi {
+    display: none;
+  }
+</style>

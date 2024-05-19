@@ -1,12 +1,14 @@
 ---
 import Default from "../../layouts/Default.astro";
 import DrinkPage from "../../components/browse/DrinkPage.astro";
+import Unauthorized from "../../components/browse/Unauthorized.astro";
 
 export const prerender = false;
 
 const { id } = Astro.params;
 
 let drinksData: JSON;
+let alcoholAllowed;
 
 try {
 	drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/${id}`, {
@@ -21,13 +23,16 @@ try {
 			if (Astro.url.hostname.split(".")[0] === "syppi") {
 				throw new Error("Not allowed");
 			}
+			alcoholAllowed = true;
 			return data;
 		});
 } catch (error) {
-	return Astro.redirect("/oops");
+	drinksData = {};
+	alcoholAllowed = false;
 }
 ---
 
 <Default title={` - ${drinksData.name}`}>
-	<DrinkPage data={drinksData}></DrinkPage>
+	{alcoholAllowed && <DrinkPage data={drinksData}></DrinkPage>}
+	{!alcoholAllowed && <Unauthorized></Unauthorized>}
 </Default>

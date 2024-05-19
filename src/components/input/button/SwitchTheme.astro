@@ -14,11 +14,13 @@ import LightMode from "../../icon/LightMode.astro";
   const button = document.querySelector("#killthelights");
 
   const enableDarkMode = () => {
+    button.title = 'Turn on the lights!'
     document.body.classList.add("theme-dark");
     localStorage.setItem("darkMode", "enabled");
   }
 
   const disableDarkMode = () => {
+    button.title = 'Kill the lights!'
     document.body.classList.remove("theme-dark");
     localStorage.setItem("darkMode", "disabled");
   }
@@ -26,6 +28,8 @@ import LightMode from "../../icon/LightMode.astro";
   function setTheme() {
     if (darkMode === "enabled") {
       enableDarkMode();
+    } else {
+      disableDarkMode();
     }
   }
 

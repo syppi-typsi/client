@@ -1,0 +1,43 @@
+---
+
+---
+
+<section class="unauthorized">
+  <section class="large">
+    <h2 class="angy">(ò_óˇ)</h2>
+    <h3 class="title">Hey, who let you in?!</h3>
+  </section>
+  <p>You're not supposed to be here, hit the road!</p>
+  <a href="/"><p>Back to main page</p></a>
+</section>
+
+<style lang="scss">
+  .unauthorized {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .angy {
+    font-size: 4em;
+    color: var(--color-003);
+    user-select: none;
+  }
+  .large {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+
+    * {
+      grid-area: 1/1/1/1;
+    }
+  }
+  .title {
+    font-size: 3em;
+  }
+  a {
+    color: var(--color-primary);
+  }
+</style>
