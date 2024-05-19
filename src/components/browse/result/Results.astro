@@ -15,7 +15,7 @@ import ResultHeader from "./ResultHeader.astro";
 
 <template id="card-template">
   <a href="">
-    <section class="card">
+    <section class="card-grid">
       <section class="image"><img alt=""></section>
       <section class="info">
         <h2 class="title"></h2>
@@ -26,6 +26,24 @@ import ResultHeader from "./ResultHeader.astro";
           <p></p>
         </div>
       </section>
+      <Triangle class="bg-tri"></Triangle>
+    </section>
+  </a>
+</template>
+
+<template id="list-template">
+  <a href="">
+    <section class="card-list">
+      <section class="image"><img alt=""></section>
+      <section class="info">
+        <h2 class="title"></h2>
+        <section class="sub">
+          <h4 class="manuf"></h4>
+        </section>
+      </section>
+      <div class="rating">
+        <p></p>
+      </div>
       <Triangle class="bg-tri"></Triangle>
     </section>
   </a>
@@ -47,6 +65,30 @@ import ResultHeader from "./ResultHeader.astro";
 
   function createGridCard(input: { product_image: string; name: string; producer: string; id: any; rating: any }) {
     const template = document.getElementById('card-template') as HTMLTemplateElement
+    const content = template?.content.cloneNode(true) as HTMLElement
+
+    const img = content.querySelector('img')!
+    const title = content.querySelector('.title')!
+    const manuf = content.querySelector('.manuf')!
+    const rating = content.querySelector('.rating p')!
+    const anchor = content.querySelector('a')!
+
+    img.src = input.product_image ? input.product_image : "/img/syppi-typsi-bw-o.svg"
+    title.innerHTML = input.name
+    manuf.innerHTML = input.producer
+    anchor.href = `/drink/${input.id}`
+
+    if (input.rating) {
+      rating.innerHTML = `${input.rating}/100`
+    } else {
+      rating.innerHTML = `?/100`
+    }
+
+    return content
+  }
+
+  function createListCard(input: { product_image: string; name: string; producer: string; id: any; rating: any }) {
+    const template = document.getElementById('list-template') as HTMLTemplateElement
     const content = template?.content.cloneNode(true) as HTMLElement
 
     const img = content.querySelector('img')!
@@ -104,8 +146,19 @@ import ResultHeader from "./ResultHeader.astro";
       )
     }).then(response => response.json()).catch(() => navigate('/oops'))
     totalPages = drinksData.totalPages
+    const resultMode = localStorage.getItem('resultMode')
+    const results = document.querySelector('.results')!
+    if (resultMode === 'grid') {
+      results.dataset.viewMode = 'grid'
+    } else if (resultMode === 'list') {
+      results.dataset.viewMode = 'list'
+    }
     for (const iterator of drinksData.result) {
-      document.querySelector('.results')?.appendChild(createGridCard(iterator))
+      if (resultMode === 'grid') {
+        results.appendChild(createGridCard(iterator))
+      } else if (resultMode === 'list') {
+        results.appendChild(createListCard(iterator))
+      }
     }
     document.querySelector('.result-info p')!.innerHTML = `${Math.min(limit*currentPage,drinksData.totalResults)}/${drinksData.totalResults} results`
   }
@@ -167,6 +220,17 @@ import ResultHeader from "./ResultHeader.astro";
     })
 
     document.querySelector('.mainview')?.addEventListener('scroll',handleInfiniteScroll)
+
+    const gridButton = document.getElementById('gridview')
+    const listButton = document.getElementById('listview')
+
+    gridButton?.addEventListener('click',async () => {
+      await updateResults(searchbox, ordering)
+    })
+
+    listButton?.addEventListener('click',async () => {
+      await updateResults(searchbox, ordering)
+    })
   }
 
   observeInputs()
@@ -193,11 +257,16 @@ import ResultHeader from "./ResultHeader.astro";
 
   .results {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
     grid-auto-rows: min-content;
     gap: 16px;
     background-color: var(--color-002);
     padding: 20px;
+    &[data-view-mode="grid"] {
+      grid-template-columns: repeat(auto-fit, minmax(30ch, 1fr));
+    }
+    &[data-view-mode="list"] {
+      grid-template-columns: 1fr;
+    }
     h2 {
       font-weight: 500;
     }
@@ -208,7 +277,7 @@ import ResultHeader from "./ResultHeader.astro";
       color: inherit;
     }
 
-  .card {
+  .card-grid {
     display: grid;
     position: relative;
     overflow: hidden;
@@ -265,6 +334,88 @@ import ResultHeader from "./ResultHeader.astro";
 
     .rating {
       font-size: 1.4em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .sub {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .bg-tri {
+      z-index: 0;
+      position: absolute;
+      top: -35px;
+      right: -12px;
+      height: 120px;
+      width: auto;
+      color: color-mix(in oklab, var(--color-primary) 40%, var(--color-001) 60%);
+      transition: color 75ms ease-in-out;
+    }
+
+    &:hover .bg-tri {
+      color: var(--color-primary);
+    }
+  }
+
+  .card-list {
+    display: grid;
+    position: relative;
+    overflow: hidden;
+    grid-template-columns: 70px auto min-content;
+    align-items: center;
+    gap: 8px;
+    height: 60px;
+    padding: 1em;
+    border-radius: var(--element-border-radius);
+    // background-color: var(--color-002);
+    outline: var(--pane-outline) solid var(--color-003);
+
+    * {
+      z-index: 10;
+    }
+
+    .image {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      padding: 0 .5em;
+      box-sizing: border-box;
+    }
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      object-position: bottom;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      gap: 4px;
+      max-height: 100%;
+      overflow: hidden;
+
+      .title {
+        line-height: 1.2;
+        word-break: break-word;
+        overflow: hidden;
+        min-height: 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+      }
+
+      .manuf {
+        color: var(--color-005);
+      }
+    }
+
+    .rating {
+      font-size: 2em;
       font-weight: 600;
       white-space: nowrap;
     }

@@ -18,10 +18,35 @@ import PageSelect from "./PageSelect.astro";
       <option value="2">Recently added</option>
       <option value="3">Most relevant</option>
     </GenericSelect>
-    <GenericButton><Grid/></GenericButton>
-    <GenericButton><List/></GenericButton>
+    <GenericButton id="gridview"><Grid/></GenericButton>
+    <GenericButton id="listview"><List/></GenericButton>
   </div>
 </section>
+
+<script>
+  let resultMode = localStorage.getItem("resultMode");
+
+  function setMode() {
+    if (resultMode !== "grid" && resultMode !== "list") {
+      localStorage.setItem("resultMode", "grid");
+    }
+  }
+
+  function initialize() {
+    const gridButton = document.getElementById('gridview')
+    const listButton = document.getElementById('listview')
+    gridButton?.addEventListener('click', () => {
+      localStorage.setItem("resultMode", "grid");
+    })  
+    listButton?.addEventListener('click', () => {
+      localStorage.setItem("resultMode", "list");
+    })
+  }
+
+  setMode()
+  initialize()
+  document.addEventListener('astro:after-swap', initialize)
+</script>
 
 <style lang="scss">
   .header {
