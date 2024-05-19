@@ -123,6 +123,13 @@ import Collapsible from "./Collapsible.astro";
 
   async function initialize() {
     categoriesData = await getData() // get categories data
+    if (window.location.hostname.split(".")[0] === 'syppi') {
+      categoriesData = categoriesData.filter((cat) => {
+        if (!cat.alcoholic) {
+          return cat
+        }
+      })
+    }
 
     for (const iterator of getChildren(null)) { // for every root category
       document.querySelector('.checkboxes')?.appendChild(createCheckbox(iterator.name, iterator.id)) // add it and its children to DOM
