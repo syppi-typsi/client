@@ -9,7 +9,7 @@ import ResultHeader from "./ResultHeader.astro";
   <section class="mainview">
     <section class="results">
     </section>
-    <ResultFooter></ResultFooter>
+    <!-- <ResultFooter></ResultFooter> -->
   </section>
 </section>
 
@@ -33,6 +33,10 @@ import ResultHeader from "./ResultHeader.astro";
 
 <script>
   import { navigate } from 'astro:transitions/client';
+
+  let currentPage = 0
+  let totalPages = 0
+
   function getSelectedIDs() {
     return Array.from(document.querySelectorAll(`.categories .checkboxes input[type="checkbox"]:checked`)).map(obj => {
       if (obj instanceof HTMLElement) {
@@ -65,7 +69,16 @@ import ResultHeader from "./ResultHeader.astro";
     return content
   }
 
-  async function updateResults(searchbox, ordering) {
+  async function updateResults() {
+    document.querySelector('.results')!.innerHTML = ''
+    currentPage = 0
+    while (document.querySelector('.mainview')!.clientHeight + document.querySelector('.mainview')!.scrollTop >= document.querySelector('.mainview')!.scrollHeight) {
+      currentPage++
+      await loadNewPage()
+    }
+  }
+
+  async function loadNewPage() {
     let alcohol = false
     if (window.location.hostname.split(".")[0] === 'typsi') { // allow alcoholic drinks when using typsi
       alcohol = true
@@ -78,29 +91,35 @@ import ResultHeader from "./ResultHeader.astro";
       method: 'POST',
       body: JSON.stringify(
         {
-          "search": searchbox.value,
-          "limit": 100,
-          "page": 1,
+          "search": document.querySelector('.search-bar input[type="search"]')!.value,
+          "limit": 20,
+          "page": currentPage,
           "filters": {
             "categories": getSelectedIDs(),
             "alcohol": alcohol
           },
-          "ordering": Number(ordering.value)
+          "ordering": Number(document.querySelector('.view .select select')!.value)
         }
       )
     }).then(response => response.json()).catch(() => navigate('/oops'))
-
-    document.querySelector('.results')!.innerHTML = ''
-
+    totalPages = drinksData.totalPages
+    const results = document.querySelector('.results')!
     for (const iterator of drinksData.result) {
       document.querySelector('.results')?.appendChild(createGridCard(iterator))
     }
   }
 
-  const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
+  async function handleInfiniteScroll() {
+    const endOfPage = document.querySelector('.mainview')!.clientHeight + document.querySelector('.mainview')!.scrollTop >= document.querySelector('.mainview')!.scrollHeight;
+    if (endOfPage && currentPage < totalPages) {
+      currentPage++
+      await loadNewPage()
+    }
+  }
 
   function searchInit() {
     const ordering: HTMLInputElement = document.querySelector('.view .select select')!
+    const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
     let timer: number | undefined;
 
     document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
@@ -130,6 +149,7 @@ import ResultHeader from "./ResultHeader.astro";
     }
     const ordering: HTMLInputElement = document.querySelector('.view .select select')!
     const filters = document.querySelector('.filters-container')!
+    const searchbox: HTMLInputElement = document.querySelector('.search-bar input[type="search"]')!
 
     if (!searchbox || !ordering || !filters) {
       return
@@ -144,6 +164,8 @@ import ResultHeader from "./ResultHeader.astro";
     ordering.addEventListener('input', async () => {
       await updateResults(searchbox, ordering)
     })
+
+    document.querySelector('.mainview')?.addEventListener('scroll',handleInfiniteScroll)
   }
 
   observeInputs()

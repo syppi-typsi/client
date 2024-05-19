@@ -55,7 +55,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
   <section class="container">
     <section class="back">
       <p>{categoryData.name} / {data.name}</p>
-      <a href="/"><ArrowLeftTail/><strong>Back</strong></a>
+      <button><ArrowLeftTail/><strong>Back</strong></button>
     </section>
     <main class="content">
       <section class="image">
@@ -172,6 +172,9 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
       if (await sendRating(ratingInput)) {
       }
     })
+    document.querySelector('.back button')?.addEventListener('click', () => {
+      history.back()
+    })
   }
 
   initialize()
@@ -204,7 +207,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
       text-overflow: ellipsis;
       white-space: nowrap; 
     }
-    a {
+    button {
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
@@ -212,8 +215,12 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
       width: min-content;
       white-space: nowrap;
       font-size: 1.3em;
+      font-family: inherit;
       text-decoration: none;
       color: var(--color-005);
+      background: none;
+      border: none;
+      cursor: pointer;
     }
   }
 
