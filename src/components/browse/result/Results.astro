@@ -15,7 +15,7 @@ import ResultHeader from "./ResultHeader.astro";
 
 <template id="card-template">
   <a href="">
-    <section class="card-grid">
+    <section class="card">
       <section class="image"><img alt=""></section>
       <section class="info">
         <h2 class="title"></h2>
@@ -33,7 +33,7 @@ import ResultHeader from "./ResultHeader.astro";
 
 <template id="list-template">
   <a href="">
-    <section class="card-list">
+    <section class="card card-list">
       <section class="image"><img alt=""></section>
       <section class="info">
         <h2 class="title"></h2>
@@ -273,11 +273,11 @@ import ResultHeader from "./ResultHeader.astro";
   }
 
   a {
-      text-decoration: none;
-      color: inherit;
-    }
+    text-decoration: none;
+    color: inherit;
+  }
 
-  .card-grid {
+  .card {
     display: grid;
     position: relative;
     overflow: hidden;
@@ -350,94 +350,22 @@ import ResultHeader from "./ResultHeader.astro";
       right: -12px;
       height: 120px;
       width: auto;
-      color: color-mix(in oklab, var(--color-primary) 40%, var(--color-001) 60%);
+      color: color-mix(in oklab, var(--color-primary) 60%, var(--color-001) 40%);
       transition: color 75ms ease-in-out;
     }
 
     &:hover .bg-tri {
-      color: var(--color-primary);
+      color: color-mix(in oklab, var(--color-primary) 88%, var(--color-001) 12%);
     }
   }
 
   .card-list {
-    display: grid;
-    position: relative;
-    overflow: hidden;
     grid-template-columns: 70px auto min-content;
     align-items: center;
-    gap: 8px;
     height: 60px;
-    padding: 1em;
-    border-radius: var(--element-border-radius);
-    // background-color: var(--color-002);
-    outline: var(--pane-outline) solid var(--color-003);
-
-    * {
-      z-index: 10;
-    }
-
-    .image {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      padding: 0 .5em;
-      box-sizing: border-box;
-    }
-
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: contain;
-      object-position: bottom;
-    }
-
-    .info {
-      display: flex;
-      flex-direction: column;
-      justify-content: end;
-      gap: 4px;
-      max-height: 100%;
-      overflow: hidden;
-
-      .title {
-        line-height: 1.2;
-        word-break: break-word;
-        overflow: hidden;
-        min-height: 0;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 4;
-      }
-
-      .manuf {
-        color: var(--color-005);
-      }
-    }
 
     .rating {
       font-size: 2em;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .sub {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .bg-tri {
-      z-index: 0;
-      position: absolute;
-      top: -35px;
-      right: -12px;
-      height: 120px;
-      width: auto;
-      color: color-mix(in oklab, var(--color-primary) 40%, var(--color-001) 60%);
-      transition: color 75ms ease-in-out;
-    }
-
-    &:hover .bg-tri {
-      color: var(--color-primary);
     }
   }
 </style>
