@@ -134,20 +134,20 @@ import ResultHeader from "./ResultHeader.astro";
       method: 'POST',
       body: JSON.stringify(
         {
-          "search": document.querySelector('.search-bar input[type="search"]')!.value,
+          "search": (document.querySelector('.search-bar input[type="search"]')! as HTMLInputElement).value,
           "limit": limit,
           "page": currentPage,
           "filters": {
             "categories": getSelectedIDs(),
             "alcohol": alcohol
           },
-          "ordering": Number(document.querySelector('.view .select select')!.value)
+          "ordering": Number((document.querySelector('.view .select select')! as HTMLInputElement).value)
         }
       )
     }).then(response => response.json()).catch(() => navigate('/oops'))
     totalPages = drinksData.totalPages
     const resultMode = localStorage.getItem('resultMode')
-    const results = document.querySelector('.results')!
+    const results = document.querySelector('.results')! as HTMLElement
     if (resultMode === 'grid') {
       results.dataset.viewMode = 'grid'
     } else if (resultMode === 'list') {
@@ -178,20 +178,20 @@ import ResultHeader from "./ResultHeader.astro";
 
     document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
       clearTimeout(timer)
-      await updateResults(searchbox, ordering)
+      await updateResults()
     })
 
     searchbox.addEventListener('input', () => {
       clearTimeout(timer)
       timer = setTimeout(async () => {
-        await updateResults(searchbox, ordering)
+        await updateResults()
       }, 1000)
     })
 
     searchbox.addEventListener('keypress', async (e) => {
       if (e.key === 'Enter') {
         clearTimeout(timer)
-        await updateResults(searchbox, ordering)
+        await updateResults()
       }
     })
   }
@@ -210,13 +210,13 @@ import ResultHeader from "./ResultHeader.astro";
     }
 
     const observer = new MutationObserver(async () => {
-      await updateResults(searchbox, ordering)
+      await updateResults()
     });
 
     observer.observe(filters, config)
 
     ordering.addEventListener('input', async () => {
-      await updateResults(searchbox, ordering)
+      await updateResults()
     })
 
     document.querySelector('.mainview')?.addEventListener('scroll',handleInfiniteScroll)
@@ -225,11 +225,11 @@ import ResultHeader from "./ResultHeader.astro";
     const listButton = document.getElementById('listview')
 
     gridButton?.addEventListener('click',async () => {
-      await updateResults(searchbox, ordering)
+      await updateResults()
     })
 
     listButton?.addEventListener('click',async () => {
-      await updateResults(searchbox, ordering)
+      await updateResults()
     })
   }
 

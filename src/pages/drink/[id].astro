@@ -7,30 +7,24 @@ export const prerender = false;
 
 const { id } = Astro.params;
 
-let drinksData: JSON;
-let allowed;
+let drinksData: { name?: string } = {};
+let allowed = false;
 
-try {
-	drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/${id}`, {
-		method: "GET",
-	})
-		.then((response) => response.json())
-		.then((data) => {
+drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/${id}`, {
+	method: "GET",
+})
+	.then((response) => response.json())
+	.then((data) => {
+		if (data.abv === 0 || data.abv === null) {
 			allowed = true;
-			const abv = data.abv;
-
-			if (abv === 0 || abv === null) {
-				return data;
-			}
-			if (Astro.url.hostname.split(".")[0] === "syppi") {
-				throw new Error("Not allowed");
-			}
 			return data;
-		});
-} catch (error) {
-	drinksData = {};
-	allowed = false;
-}
+		}
+		if (Astro.url.hostname.split(".")[0] === "syppi") {
+			return {};
+		}
+		allowed = true;
+		return data;
+	});
 ---
 
 <Default title={` - ${drinksData.name}`}>

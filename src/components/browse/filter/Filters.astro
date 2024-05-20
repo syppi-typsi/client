@@ -27,11 +27,17 @@ import Collapsible from "./Collapsible.astro";
   import { navigate } from 'astro:transitions/client';
   let categoriesData: Array<any>;
 
-  const selectedSuffix = " selected";
-  const selectedText = {
-    categories: document.querySelector(".categories .header .count")!,
-    filters: document.querySelector(".filters .header .count")!
+  interface FilterSelectedText {
+    categories: HTMLParagraphElement;
+    filters: HTMLParagraphElement;
   }
+
+  interface FilterElementsArray {
+    categories: NodeListOf<HTMLInputElement>;
+    filters: NodeListOf<HTMLInputElement>;
+  }
+
+  const selectedSuffix = " selected";
 
   async function getData() {
     return await fetch(`${import.meta.env.PUBLIC_API_URL}/categories`, {
@@ -65,7 +71,7 @@ import Collapsible from "./Collapsible.astro";
     return content
   }
   
-  function updateChecked(suffix?: string) {
+  function updateChecked(suffix?: string): FilterElementsArray {
     const query = `.checkboxes input[type="checkbox"]${suffix || ''}`
     return {
       categories: document.querySelectorAll(`.categories ${query}`)!,
@@ -81,7 +87,7 @@ import Collapsible from "./Collapsible.astro";
     }
   }
 
-  function updateCheckedText(checked, selectedText) {
+  function updateCheckedText(checked: FilterElementsArray, selectedText: FilterSelectedText) {
     if (selectedText.categories === null && selectedText.filters === null) {
       return
     }
@@ -135,17 +141,17 @@ import Collapsible from "./Collapsible.astro";
       document.querySelector('.checkboxes')?.appendChild(createCheckbox(iterator.name, iterator.id)) // add it and its children to DOM
     }
 
-    const selectedText = {
-      categories: document.querySelector(".categories .header .count"),
-      filters: document.querySelector(".filters .header .count")
+    const selectedText: FilterSelectedText = {
+      categories: document.querySelector(".categories .header .count")!,
+      filters: document.querySelector(".filters .header .count")!
     }
     
     Object.values(updateChecked()).forEach((value) => {
-      value.forEach((element) => {
+      value.forEach((element: HTMLInputElement) => {
         element.addEventListener("change", () => {
-          changeAllChildren(element as HTMLInputElement)
-          uncheckParents(element as HTMLInputElement)
-          allSiblingsChecked(element as HTMLInputElement)
+          changeAllChildren(element)
+          uncheckParents(element)
+          allSiblingsChecked(element)
           updateCheckedText(updateChecked(":checked"),selectedText)
         })
       })

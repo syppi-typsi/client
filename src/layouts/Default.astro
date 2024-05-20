@@ -5,7 +5,7 @@ import "../styles/palette.scss";
 import "../styles/sizes.scss";
 const { title } = Astro.props;
 
-let prefix: string;
+let prefix = "";
 
 switch (Astro.url.hostname.split(".")[0]) {
 	case "syppi":

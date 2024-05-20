@@ -11,7 +11,7 @@ import LightMode from "../../icon/LightMode.astro";
 
 <script>
   let darkMode = localStorage.getItem("darkMode");
-  const button = document.querySelector("#killthelights");
+  const button = document.querySelector("#killthelights")! as HTMLElement;
 
   const enableDarkMode = () => {
     button.title = 'Turn on the lights!'
