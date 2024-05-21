@@ -6,8 +6,8 @@ import ModeButton from "../input/button/ModeButton.astro";
 ---
 
 <section class="left">
-  {Astro.url.hostname.split(".")[0] === 'typsi' && <a href="/"><img class="theme-light" src="/img/typsilogo-black.svg" alt="" /><img class="theme-dark" src="/img/typsilogo-white.svg" alt="" /></a>}
-  {Astro.url.hostname.split(".")[0] === 'syppi' && <a href="/"><img class="theme-light" src="/img/syppilogo-black.svg" alt="" /><img class="theme-dark" src="/img/syppilogo-white.svg" alt="" /></a>}
+  <a href="/" class="typsilogo"><img class="theme-light" src="/img/typsilogo-black.svg" alt="" /><img class="theme-dark" src="/img/typsilogo-white.svg" alt="" /></a>
+  <a href="/" class="syppilogo"><img class="theme-light" src="/img/syppilogo-black.svg" alt="" /><img class="theme-dark" src="/img/syppilogo-white.svg" alt="" /></a>
   <SearchBar></SearchBar>
 </section>
 <section class="right">
@@ -18,6 +18,19 @@ import ModeButton from "../input/button/ModeButton.astro";
   <GenericButton class="signup">Sign up</GenericButton> -->
   <p>demouser</p>
 </section>
+
+<script>
+  function initialize() {
+    if (window.location.hostname.split(".")[0] === 'typsi') {
+      (document.querySelector('.typsilogo')! as HTMLElement).style.display = 'inherit'
+    }
+    if (window.location.hostname.split(".")[0] === 'syppi') {
+      (document.querySelector('.syppilogo')! as HTMLElement).style.display = 'inherit'
+    }
+  }
+  initialize()
+  document.addEventListener('astro:after-swap', initialize)
+</script>
 
 <style lang="scss">
   .left {
@@ -55,6 +68,10 @@ import ModeButton from "../input/button/ModeButton.astro";
   }
 
   :root:has(body.theme-dark) .theme-light {
+    display: none;
+  }
+
+  .syppilogo, .typsilogo {
     display: none;
   }
 </style>
