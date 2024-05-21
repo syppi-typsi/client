@@ -130,18 +130,23 @@ import ResultHeader from "./ResultHeader.astro";
     if (!filters) {
       return
     }
+    const search = (document.querySelector('.search-bar input[type="search"]')! as HTMLInputElement).value
+    const ordering = (document.querySelector('.view .select select')! as HTMLInputElement)
+    if (search !== '') {
+      ordering.value = '3'
+    }
     const drinksData = await fetch(`${import.meta.env.PUBLIC_API_URL}/drinks/search`, {
       method: 'POST',
       body: JSON.stringify(
         {
-          "search": (document.querySelector('.search-bar input[type="search"]')! as HTMLInputElement).value,
+          "search": search,
           "limit": limit,
           "page": currentPage,
           "filters": {
             "categories": getSelectedIDs(),
             "alcohol": alcohol
           },
-          "ordering": Number((document.querySelector('.view .select select')! as HTMLInputElement).value)
+          "ordering": Number(ordering.value)
         }
       )
     }).then(response => response.json()).catch(() => navigate('/oops'))
