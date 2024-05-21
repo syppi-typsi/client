@@ -111,10 +111,14 @@ import ResultHeader from "./ResultHeader.astro";
     return content
   }
 
+  function getMainViewScrollEnd(): boolean {
+    return document.querySelector('.mainview')!.clientHeight + document.querySelector('.mainview')!.scrollTop >= (document.querySelector('.mainview')!.scrollHeight - 100)
+  }
+
   async function updateResults() {
     document.querySelector('.results')!.innerHTML = ''
     currentPage = 0
-    while (document.querySelector('.mainview')!.clientHeight + document.querySelector('.mainview')!.scrollTop >= document.querySelector('.mainview')!.scrollHeight) {
+    while (getMainViewScrollEnd()) {
       currentPage++
       await loadNewPage()
       if (totalPages <= currentPage) {
@@ -172,11 +176,12 @@ import ResultHeader from "./ResultHeader.astro";
   }
 
   async function handleInfiniteScroll() {
-    const endOfPage = document.querySelector('.mainview')!.clientHeight + document.querySelector('.mainview')!.scrollTop >= document.querySelector('.mainview')!.scrollHeight;
+    const endOfPage = getMainViewScrollEnd();
     if (endOfPage && currentPage < totalPages) {
       currentPage++
       await loadNewPage()
     }
+    return true
   }
 
   function searchInit() {
@@ -227,7 +232,14 @@ import ResultHeader from "./ResultHeader.astro";
       await updateResults()
     })
 
-    document.querySelector('.mainview')?.addEventListener('scroll',handleInfiniteScroll)
+    let allowLoad = true
+
+    document.querySelector('.mainview')?.addEventListener('scroll', async () => {
+      if (allowLoad) {
+        allowLoad = false
+        allowLoad = await handleInfiniteScroll()
+      }
+    })
 
     const gridButton = document.getElementById('gridview')
     const listButton = document.getElementById('listview')
