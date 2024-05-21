@@ -20,20 +20,19 @@ import MagGlass from "../icon/MagGlass.astro";
   import { navigate } from 'astro:transitions/client';
 
   function add() {
-      console.log(location.pathname);
-      const searchbox = document.querySelector('.search-bar input[type="search"]')!
-      searchbox.addEventListener('keypress', async (e) => {
-        if (location.pathname !== '/') {
-          if ((e as KeyboardEvent).key === 'Enter') {
-            navigate('/')
-          }
-        }
-      })
-      document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
-        if (location.pathname !== '/') {
+    const searchbox = document.querySelector('.search-bar input[type="search"]')!
+    searchbox.addEventListener('keypress', async (e) => {
+      if (location.pathname !== '/') {
+        if ((e as KeyboardEvent).key === 'Enter') {
           navigate('/')
         }
-      })
+      }
+    })
+    document.querySelector('.search-bar .return')?.addEventListener('click', async () => {
+      if (location.pathname !== '/') {
+        navigate('/')
+      }
+    })
   }
   add()
   // document.addEventListener('astro:after-swap',() => {
