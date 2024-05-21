@@ -77,6 +77,7 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
                 /100
               </h2>
             </section>
+            <p class="notice"></p>
           </section>
         </section>
         <p class="desc">{replaceMissing(data.description, "(No description)")}</p>
@@ -142,6 +143,10 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
           "rating": value,
         }
       )
+    }).then((res) => {
+      if (res.status === 401) {
+        document.querySelector('.rating .notice')!.innerHTML = '<strong>Read-only mode!<br>Missing admin key</strong>'
+      }
     }).catch(() => navigate('/oops'))
     
     await updateRating(id)
