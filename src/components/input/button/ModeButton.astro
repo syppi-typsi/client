@@ -7,20 +7,23 @@ import TropicalDrink from "../../icon/TropicalDrink.astro";
 <button type="button" id="appmode" transition:persist>
   <BeverageBox class="syppi"></BeverageBox>
   <TropicalDrink class="typsi"></TropicalDrink>
+  <div class="circle">
+    <div class="fill"></div>
+  </div>
 </button>
 
 <script>
   const button = document.getElementById('appmode')!
   if (window.location.hostname.split(".")[0] === 'typsi') {
     button.title = 'Switch to syppi!';
-    (document.querySelector('.syppi')! as HTMLElement).style.display = 'inherit'
+    (document.querySelector('.circle')! as HTMLElement).classList.add('right')
     button?.addEventListener('click', () => {
       window.location.href = `${window.location.href.replace('typsi','syppi')}`
     })
   }
   if (window.location.hostname.split(".")[0] === 'syppi') {
     button.title = 'Switch to typsi!';
-    (document.querySelector('.typsi')! as HTMLElement).style.display = 'inherit'
+    (document.querySelector('.circle')! as HTMLElement).classList.add('left')
     button?.addEventListener('click', () => {
       window.location.href = `${window.location.href.replace('syppi','typsi')}`
     })
@@ -29,17 +32,48 @@ import TropicalDrink from "../../icon/TropicalDrink.astro";
 
 <style lang="scss">
   button {
-    height: 70%;
-    background: none;
+    display: flex;
+    position: relative;
+    height: 85%;
+    background: var(--color-001);
     border: none;
+    outline: 2px solid var(--color-003);
+    border-radius: 999em;
     cursor: pointer;
+    padding: 0;
+    // flex-grow: 1;
+    // flex-shrink: 1;
   }
   svg {
+    box-sizing: border-box;
+    padding: .6em;
     color: var(--color-text);
     width: auto;
     height: 100%;
+    z-index: 5;
   }
-  .syppi, .typsi {
-    display: none;
+  .syppi {
+    transform: translateX(-1px);
+  }
+  .circle {
+    height: 100%;
+    aspect-ratio: 1/1;
+    position: absolute;
+    top: 0;
+    padding: .3em;
+    box-sizing: border-box;
+    .fill {
+      display: block;
+      background: var(--color-003);
+      height: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 999em;
+    }
+  }
+  .left {
+    left: 0;
+  }
+  .right {
+    right: 0;
   }
 </style>
