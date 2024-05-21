@@ -146,6 +146,8 @@ function replaceMissing(input: string | null, other = "No data", suffix = "") {
     }).then((res) => {
       if (res.status === 401) {
         document.querySelector('.rating .notice')!.innerHTML = '<strong>Read-only mode!<br>Missing admin key</strong>'
+      } else if (res.ok) {
+        document.querySelector('.rating .notice')!.innerHTML = ''
       }
     }).catch(() => navigate('/oops'))
     
