@@ -11,8 +11,8 @@
 	},
 	"dependencies": {
 		"@astrojs/check": "^0.5.10",
-		"@astrojs/node": "^8.3.4",
-		"astro": "^4.16.18",
+		"@astrojs/node": "^9.4.1",
+		"astro": "^5.14.4",
 		"typescript": "^5.4.5"
 	},
 	"devDependencies": {
